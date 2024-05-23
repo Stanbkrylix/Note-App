@@ -84,10 +84,45 @@ body {
     justify-content: center;
     align-items: center;
 }
+.input-field {
+    border: 0.3rem solid #1d2326;
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    text-wrap: wrap;
+}
+.input-folder {
+    width: 100%;
+    font-size: 1.7em;
+    padding: 0.4rem;
+    margin-bottom: 0.3rem;
+    border-radius: 0.5rem;
+    border: none;
+}
+.input-folder:focus {
+    outline: none;
+}
+.input-field-btn {
+    width: 100%;
+}
+.confirm-btn,
+.cancel-btn {
+    width: 49%;
+    font-size: 1.3em;
+    padding: 0.3rem;
+    border-radius: 0.5rem;
+    /* border: 1px solid #436170; */
+    cursor: pointer;
+    background-color: #313b41;
+    color: white;
+}
+.confirm-btn:hover,
+.cancel-btn:hover {
+    border: 0.2rem solid #1d2326;
+}
 
 /* Add folder section */
 .add-project {
-    padding: 0.5rem;
+    /* padding: 0.5rem; */
     width: 100%;
 }
 .add-project-btn {
