@@ -81,30 +81,28 @@ const noteApp = (function () {
         // to only select just the list without selcting any of the inside elements
         const liElement = e.target.closest("li.project-lists-list");
         if (liElement) {
-            console.log(liElement);
             const id = Number.parseInt(liElement.dataset.id);
             const value = filterStorage(id);
-            // console.log(value);
         }
 
+        // confirm adding new project
         if (target.classList.contains("confirm-btn")) {
             if (inputFolder.value == "") return;
             const value = createFolder(inputFolder.value);
             storageArray.push(value);
             inputFolder.value = "";
             renderProject();
-            console.log(storageArray);
         }
 
+        // cancel adding new folder
         if (target.classList.contains("cancel-btn")) {
             renderProject();
         }
 
+        // start editing
         if (target.classList.contains("edit-folder")) {
-            // const inputBtn = document.querySelector("edit-input");
             const dataId = target.parentElement.parentElement.dataset.id;
             const [value] = filterStorage(dataId);
-            // console.log(value);
             loadInputField(
                 "input-edit-btn",
                 "input-cancel-edit-btn",
@@ -117,12 +115,25 @@ const noteApp = (function () {
 
         // confirm edit button
         if (target.classList.contains("input-edit-btn")) {
-            // console.log(target);
             const inputBtn = document.querySelector(".edit-input");
             const dataId = inputBtn.dataset.id;
             const id = Number.parseInt(dataId);
             const [value] = filterStorage(id);
             value.projectName = inputBtn.value;
+            renderProject();
+        }
+
+        // cancel edit
+        if (target.classList.contains("input-cancel-edit-btn")) {
+            renderProject();
+        }
+
+        // delete projects
+        if (target.classList.contains("delete-folder")) {
+            const dataId = target.parentElement.parentElement.dataset.id;
+            const [value] = filterStorage(dataId);
+            const index = storageArray.indexOf(value);
+            storageArray.splice(index, 1);
             renderProject();
         }
     });
