@@ -19,9 +19,16 @@ const noteApp = (function () {
         return `
         <li class="project-lists-list" data-id="${id}">
         <span class="text">${text}</span>
-        <span class="material-symbols-outlined">
-            more_horiz
+        <div class="edit-and-delete">
+        <span class="material-symbols-outlined edit-folder">
+            edit
         </span>
+        <span
+            class="material-symbols-outlined delete-folder"
+        >
+            delete
+        </span>
+    </div>
     </li>
         
         `;
@@ -41,14 +48,21 @@ const noteApp = (function () {
 
         return value;
     }
-    function loadInputField() {
+    function loadInputField(
+        confirm,
+        cancel,
+        inputClass,
+        editOrConfirm = "Confirm",
+        value = "",
+        id = ""
+    ) {
         projectLists.innerHTML = "";
         const inputFieldHtml = `
         <div class="input-field">
-        <input type="text" class="input-folder" placeholder="Add New Folder">
+        <input type="text" class="uni-input ${inputClass}" data-id="${id}" placeholder="Add New Folder" value="${value}">
         <div class="input-field-btn">
-            <button class="confirm-btn">Confirm</button>
-            <button class="cancel-btn">Cancel</button>
+            <button class="uni-btn ${confirm}">${editOrConfirm}</button>
+            <button class="uni-btn ${cancel}">Cancel</button>
         </div>
         </div>
 
@@ -57,7 +71,7 @@ const noteApp = (function () {
     }
 
     addProjectBtn.addEventListener("click", (e) => {
-        loadInputField();
+        loadInputField("confirm-btn", "cancel-btn", "input-folder");
     });
 
     projectLists.addEventListener("click", (e) => {
@@ -70,7 +84,7 @@ const noteApp = (function () {
             console.log(liElement);
             const id = Number.parseInt(liElement.dataset.id);
             const value = filterStorage(id);
-            console.log(value);
+            // console.log(value);
         }
 
         if (target.classList.contains("confirm-btn")) {
@@ -83,7 +97,32 @@ const noteApp = (function () {
         }
 
         if (target.classList.contains("cancel-btn")) {
-            // inputFolder.value = "";
+            renderProject();
+        }
+
+        if (target.classList.contains("edit-folder")) {
+            // const inputBtn = document.querySelector("edit-input");
+            const dataId = target.parentElement.parentElement.dataset.id;
+            const [value] = filterStorage(dataId);
+            // console.log(value);
+            loadInputField(
+                "input-edit-btn",
+                "input-cancel-edit-btn",
+                "edit-input",
+                "Confirm edit",
+                value.projectName,
+                value.id
+            );
+        }
+
+        // confirm edit button
+        if (target.classList.contains("input-edit-btn")) {
+            // console.log(target);
+            const inputBtn = document.querySelector(".edit-input");
+            const dataId = inputBtn.dataset.id;
+            const id = Number.parseInt(dataId);
+            const [value] = filterStorage(id);
+            value.projectName = inputBtn.value;
             renderProject();
         }
     });

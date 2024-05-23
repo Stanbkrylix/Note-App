@@ -90,7 +90,7 @@ body {
     padding: 0.5rem;
     text-wrap: wrap;
 }
-.input-folder {
+.uni-input {
     width: 100%;
     font-size: 1.7em;
     padding: 0.4rem;
@@ -98,14 +98,13 @@ body {
     border-radius: 0.5rem;
     border: none;
 }
-.input-folder:focus {
+.uni-input:focus {
     outline: none;
 }
 .input-field-btn {
     width: 100%;
 }
-.confirm-btn,
-.cancel-btn {
+.uni-btn {
     width: 49%;
     font-size: 1.3em;
     padding: 0.3rem;
@@ -118,6 +117,17 @@ body {
 .confirm-btn:hover,
 .cancel-btn:hover {
     border: 0.2rem solid #1d2326;
+}
+
+.edit-folder,
+.delete-folder {
+    padding: 0.3rem;
+    border-radius: 0.5rem;
+}
+.edit-folder:hover,
+.delete-folder:hover {
+    background-color: #1d2326;
+    /* padding: 0.5rem; */
 }
 
 /* Add folder section */
