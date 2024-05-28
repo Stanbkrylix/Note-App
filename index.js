@@ -1,18 +1,30 @@
 const noteApp = (function () {
     const addProjectBtn = document.querySelector(".add-project-btn");
     const projectLists = document.querySelector(".project-lists");
-    const projectListsList = document.querySelector(".project-lists-list");
+    // const projectListsList = document.querySelector(".project-lists-list");
+    const addNewNotes = document.querySelector(".add-notes-btn");
+    const displayNoteSection = document.querySelector(".display-note-section");
+    const noteHeader = document.querySelector(".note-header");
+    const noteCards = document.querySelector(".note-cards");
+
     const storageArray = [];
 
     function createFolder(projectName) {
         return {
             projectName: projectName,
             id: Date.now(),
-            contents: {
-                noteTitle: "Animals",
-                noteContent: "I love animals they are awesome",
-                id: Date.now() + 1,
-            },
+            contents: [
+                {
+                    noteTitle: "Animals",
+                    noteContent: "I love animals they are awesome",
+                    id: Date.now() + 1,
+                },
+                {
+                    noteTitle: "Animals",
+                    noteContent: "I love animals they are awesome",
+                    id: Date.now() + 1,
+                },
+            ],
         };
     }
     function listCard(text, id) {
@@ -74,15 +86,57 @@ const noteApp = (function () {
         loadInputField("confirm-btn", "cancel-btn", "input-folder");
     });
 
+    function selectItem(list) {
+        list.forEach((listItem) => {
+            if (listItem.classList.contains("select-project")) {
+                listItem.classList.remove("select-project");
+            }
+        });
+    }
+
+    function displayNoteCards(note) {
+        return `
+        <div class="note-card">
+        <h3 class="date-made">20 Apr</h3>
+        <h2 class="card-heading">${note.noteTitle}</h2>
+        <p class="card-para">
+            ${note.noteContent}
+        </p>
+        <div class="tags">
+            <button class="college-tag">College</button>
+            <button class="design-tag">Design</button>
+        </div>
+    </div>
+        
+        `;
+    }
+    function displayProject(project) {
+        noteHeader.textContent = `${project.projectName}`;
+        noteCards.innerHTML = "";
+
+        project.contents.forEach((contents) => {
+            noteCards.innerHTML += displayNoteCards(contents);
+        });
+        // console.log(project);
+    }
     projectLists.addEventListener("click", (e) => {
         const target = e.target;
         const inputFolder = document.querySelector(".input-folder");
 
-        // to only select just the list without selcting any of the inside elements
+        // to only select just the list without selecting any of the inside elements
         const liElement = e.target.closest("li.project-lists-list");
         if (liElement) {
+            const list = document.querySelectorAll(".project-lists-list");
             const id = Number.parseInt(liElement.dataset.id);
-            const value = filterStorage(id);
+            const [value] = filterStorage(id);
+            selectItem(list);
+            liElement.classList.add("select-project");
+
+            if (liElement.classList.contains("select-project")) {
+                displayProject(value);
+            }
+            console.log(value);
+            console.log(liElement);
         }
 
         // confirm adding new project
@@ -137,4 +191,32 @@ const noteApp = (function () {
             renderProject();
         }
     });
+
+    function loadNotesTextArea() {
+        displayNoteSection.innerHTML = "";
+        const html = `
+        <div class="tags"></div>
+        <div class="display-note">
+            <textarea
+                class="note-text"
+                name="note"
+                id=""
+                value=""
+            ></textarea>
+        </div>
+        <div class="display-btns">
+            <button class="save-note">Save Note</button>
+            <button class="cancel-note">Cancel</button>
+        </div>
+        
+        `;
+        displayNoteSection.innerHTML = html;
+    }
+
+    addNewNotes.addEventListener("click", (e) => {
+        console.log(e.target);
+        loadNotesTextArea();
+    });
+
+    displayNoteSection.addEventListener("click", (e) => {});
 })();

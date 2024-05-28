@@ -27,6 +27,7 @@ body {
     flex-direction: column;
     justify-content: space-between;
     gap: 1rem;
+    flex: 1;
 }
 
 .search-bar-div {
@@ -131,11 +132,12 @@ body {
 }
 
 /* Add folder section */
+
 .add-project {
     /* padding: 0.5rem; */
     width: 100%;
 }
-.add-project-btn {
+.add-btn {
     border: none;
     border-radius: 0.5rem;
     padding: 0.5rem;
@@ -147,7 +149,7 @@ body {
     background-color: #313b41;
     color: white;
 }
-.add-project-btn:hover {
+.add-btn:hover {
     /* background-color: #fff; */
     transform: scale(1.02);
 }
@@ -158,4 +160,108 @@ body {
 .add-project span {
 }
 .add-project-btn {
+}
+
+/* Note sectionn */
+
+.notes-section {
+    /* border: 0.5rem solid #; */
+    background-color: #1d2326;
+    color: white;
+    padding: 1.5rem;
+    flex: 2;
+}
+.note-heading {
+    margin-bottom: 1rem;
+}
+.note-header {
+    font-size: 2.5em;
+}
+.add-notes {
+    width: 100%;
+}
+.add-notes-btn {
+    margin-bottom: 1.5rem;
+}
+
+/*  note card */
+.note-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+.note-card {
+    background-color: #313b41;
+    padding: 1rem;
+    cursor: pointer;
+    border-radius: 0.5rem;
+}
+.note-card:hover {
+    transform: scale(1.02);
+}
+.note-card h3 {
+    font-size: 1.6em;
+    margin-bottom: 0.3rem;
+}
+.note-card h2 {
+    font-size: 2em;
+    margin-bottom: 0.3rem;
+}
+.note-card p {
+    font-size: 1.2em;
+    margin-bottom: 0.8rem;
+}
+
+/*  display note section */
+.display-note-section {
+    flex: 3;
+    background-color: #1d2326;
+    color: white;
+    padding: 1.5rem;
+}
+.note-title {
+    margin-bottom: 1rem;
+    font-size: 2.7em;
+}
+.display-note-p {
+    font-size: 1.5em;
+    margin-bottom: 0.5rem;
+}
+.note-text {
+    max-width: 100%;
+    width: 375px;
+    height: 360px;
+    font-size: 1.7em;
+    padding: 0.6rem;
+    border: none;
+    border-radius: 0.5rem;
+    background-color: #313b41;
+    color: white;
+    outline: none;
+    resize: none;
+}
+.display-btns {
+    margin-top: 1rem;
+    width: 100%;
+    text-align: center;
+    background-color: #313b41;
+    padding: 1rem;
+    border-radius: 0.5rem;
+}
+.display-btns button {
+    width: 49%;
+    font-size: 1.3em;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    /* border: 1px solid #436170; */
+    cursor: pointer;
+    background-color: #313b41;
+    color: white;
+}
+.display-btns button:hover {
+    border: 0.2rem solid #1d2326;
+}
+
+.select-project {
+    border: 0.2rem solid #ffffff;
 }
