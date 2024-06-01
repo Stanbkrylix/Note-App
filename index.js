@@ -7,136 +7,36 @@ const noteApp = (function () {
     const noteHeader = document.querySelector(".note-header");
     const noteCards = document.querySelector(".note-cards");
 
-    const storageArray = [];
+    const local_storage_key = "project_item";
+    const local_storage_selected_key = "selected_project";
 
-    function createFolder(projectName) {
-        return {
-            projectName: projectName,
-            id: Date.now(),
-            contents: [
-                {
-                    noteTitle: "Animals",
-                    noteContent: "I love animals they are awesome",
-                    id: Date.now() + 1,
-                },
-                {
-                    noteTitle: "Animals",
-                    noteContent: "I love animals they are awesome",
-                    id: Date.now() + 1,
-                },
-            ],
-        };
-    }
-    function listCard(text, id) {
-        return `
-        <li class="project-lists-list" data-id="${id}">
-        <span class="text">${text}</span>
-        <div class="edit-and-delete">
-        <span class="material-symbols-outlined edit-folder">
-            edit
-        </span>
-        <span
-            class="material-symbols-outlined delete-folder"
-        >
-            delete
-        </span>
-    </div>
-    </li>
-        
-        `;
-    }
-    function renderProject() {
-        projectLists.innerHTML = "";
+    let storageArray =
+        JSON.parse(localStorage.getItem(local_storage_key)) || [];
 
-        storageArray.forEach(function (item) {
-            projectLists.innerHTML += listCard(item.projectName, item.id);
-        });
-    }
+    let selectProjectId = localStorage.getItem(local_storage_selected_key);
+    // localStorage.clear();
 
-    function filterStorage(num) {
-        const value = storageArray.filter(function (item) {
-            return item.id == num;
-        });
-
-        return value;
-    }
-    function loadInputField(
-        confirm,
-        cancel,
-        inputClass,
-        editOrConfirm = "Confirm",
-        value = "",
-        id = ""
-    ) {
-        projectLists.innerHTML = "";
-        const inputFieldHtml = `
-        <div class="input-field">
-        <input type="text" class="uni-input ${inputClass}" data-id="${id}" placeholder="Add New Folder" value="${value}">
-        <div class="input-field-btn">
-            <button class="uni-btn ${confirm}">${editOrConfirm}</button>
-            <button class="uni-btn ${cancel}">Cancel</button>
-        </div>
-        </div>
-
-        `;
-        projectLists.innerHTML = inputFieldHtml;
-    }
-
-    addProjectBtn.addEventListener("click", (e) => {
-        loadInputField("confirm-btn", "cancel-btn", "input-folder");
-    });
-
-    function selectItem(list) {
-        list.forEach((listItem) => {
-            if (listItem.classList.contains("select-project")) {
-                listItem.classList.remove("select-project");
-            }
-        });
-    }
-
-    function displayNoteCards(note) {
-        return `
-        <div class="note-card">
-        <h3 class="date-made">20 Apr</h3>
-        <h2 class="card-heading">${note.noteTitle}</h2>
-        <p class="card-para">
-            ${note.noteContent}
-        </p>
-        <div class="tags">
-            <button class="college-tag">College</button>
-            <button class="design-tag">Design</button>
-        </div>
-    </div>
-        
-        `;
-    }
-    function displayProject(project) {
-        noteHeader.textContent = `${project.projectName}`;
-        noteCards.innerHTML = "";
-
-        project.contents.forEach((contents) => {
-            noteCards.innerHTML += displayNoteCards(contents);
-        });
-        // console.log(project);
-    }
+    // project list section
     projectLists.addEventListener("click", (e) => {
         const target = e.target;
         const inputFolder = document.querySelector(".input-folder");
 
         // to only select just the list without selecting any of the inside elements
         const liElement = e.target.closest("li.project-lists-list");
+
         if (liElement) {
-            const list = document.querySelectorAll(".project-lists-list");
             const id = Number.parseInt(liElement.dataset.id);
             const [value] = filterStorage(id);
-            selectItem(list);
-            liElement.classList.add("select-project");
+            selectProjectId = id;
+            updateUI();
+            selectItem();
 
-            if (liElement.classList.contains("select-project")) {
-                displayProject(value);
-            }
-            console.log(value);
+            console.log("selectedId: ", selectProjectId);
             console.log(liElement);
+
+            displayProject(value);
+
+            console.log(value);
         }
 
         // confirm adding new project
@@ -144,6 +44,7 @@ const noteApp = (function () {
             if (inputFolder.value == "") return;
             const value = createFolder(inputFolder.value);
             storageArray.push(value);
+            updateUI();
             inputFolder.value = "";
             renderProject();
         }
@@ -174,11 +75,15 @@ const noteApp = (function () {
             const id = Number.parseInt(dataId);
             const [value] = filterStorage(id);
             value.projectName = inputBtn.value;
+
+            displayProject(value);
+            updateUI();
             renderProject();
         }
 
         // cancel edit
         if (target.classList.contains("input-cancel-edit-btn")) {
+            updateUI();
             renderProject();
         }
 
@@ -188,10 +93,149 @@ const noteApp = (function () {
             const [value] = filterStorage(dataId);
             const index = storageArray.indexOf(value);
             storageArray.splice(index, 1);
+            updateUI();
             renderProject();
+            resetNoteSection();
         }
     });
 
+    function updateUI(project) {
+        localStorage.setItem(local_storage_key, JSON.stringify(storageArray));
+        localStorage.setItem(local_storage_selected_key, selectProjectId);
+    }
+
+    function selectItem() {
+        const list = document.querySelectorAll(".project-lists-list");
+
+        list.forEach((listItem) => {
+            if (listItem.classList.contains("select-project")) {
+                listItem.classList.remove("select-project");
+            }
+
+            if (Number(listItem.dataset.id) === Number(selectProjectId)) {
+                listItem.classList.add("select-project");
+            }
+        });
+        console.log("from selectItem: ", selectProjectId);
+    }
+
+    function createFolder(projectName) {
+        return {
+            projectName: projectName,
+            id: Date.now(),
+            contents: [
+                {
+                    noteTitle: "Animals",
+                    noteContent: "I love animals they are awesome",
+                    id: Date.now() + 1,
+                },
+                {
+                    noteTitle: "Animals",
+                    noteContent: "I love animals they are awesome",
+                    id: Date.now() + 1,
+                },
+            ],
+        };
+    }
+
+    function listCard(text, id) {
+        return `
+        <li class="project-lists-list" data-id="${id}">
+        <span class="text">${text}</span>
+        <div class="edit-and-delete">
+        <span class="material-symbols-outlined edit-folder">
+            edit
+        </span>
+        <span
+            class="material-symbols-outlined delete-folder"
+        >
+            delete
+        </span>
+    </div>
+    </li>
+        
+        `;
+    }
+
+    function renderProject() {
+        console.log("selectIdFromRender: ", selectProjectId);
+
+        projectLists.innerHTML = "";
+        // console.log(storageArray);
+
+        storageArray.forEach(function (item) {
+            projectLists.innerHTML += listCard(item.projectName, item.id);
+        });
+        selectItem();
+    }
+
+    function filterStorage(num) {
+        const value = storageArray.filter(function (item) {
+            return item.id == num;
+        });
+
+        return value;
+    }
+
+    function loadInputField(
+        confirm,
+        cancel,
+        inputClass,
+        editOrConfirm = "Confirm",
+        value = "",
+        id = ""
+    ) {
+        projectLists.innerHTML = "";
+        const inputFieldHtml = `
+        <div class="input-field">
+        <input type="text" class="uni-input ${inputClass}" data-id="${id}" placeholder="Add New Folder" value="${value}">
+        <div class="input-field-btn">
+            <button class="uni-btn ${confirm}">${editOrConfirm}</button>
+            <button class="uni-btn ${cancel}">Cancel</button>
+        </div>
+        </div>
+
+        `;
+        projectLists.innerHTML = inputFieldHtml;
+    }
+
+    addProjectBtn.addEventListener("click", (e) => {
+        loadInputField("confirm-btn", "cancel-btn", "input-folder");
+    });
+
+    function displayNoteCards(note) {
+        return `
+        <div class="note-card">
+        <h3 class="date-made">20 Apr</h3>
+        <h2 class="card-heading">${note.noteTitle}</h2>
+        <p class="card-para">
+            ${note.noteContent}
+        </p>
+        <div class="tags">
+            <button class="college-tag">College</button>
+            <button class="design-tag">Design</button>
+        </div>
+    </div>
+        
+        `;
+    }
+
+    function displayProject(project) {
+        noteHeader.textContent = `${project.projectName}`;
+        noteCards.innerHTML = "";
+
+        project.contents.forEach((contents) => {
+            noteCards.innerHTML += displayNoteCards(contents);
+        });
+        // console.log(project);
+    }
+
+    function resetNoteSection() {
+        noteHeader.textContent = `My Notes`;
+        noteCards.innerHTML = "";
+    }
+
+    // notes areas
     function loadNotesTextArea() {
         displayNoteSection.innerHTML = "";
         const html = `
@@ -219,4 +263,9 @@ const noteApp = (function () {
     });
 
     displayNoteSection.addEventListener("click", (e) => {});
+
+    return {
+        renderProject: renderProject,
+    };
 })();
+noteApp.renderProject();
