@@ -247,12 +247,23 @@ const noteApp = (function () {
     }
 
     function displayNoteCards(note) {
+        // manipulating note inputs
+        const partOfContent = note.noteContent.slice(
+            0,
+            note.noteContent.length / 3
+        );
+        const content =
+            note.noteContent.length >= 90
+                ? `${partOfContent}...`
+                : note.noteContent;
+
+        // return inputs
         return `
         <div class="note-card">
         <h3 class="date-made">${note.noteDate}</h3>
         <h2 class="card-heading">${note.noteTitle}</h2>
         <p class="card-para">
-            ${note.noteContent}
+            ${content}
         </p>
         <div class="tags">
             <button class="college-tag">College</button>
@@ -308,3 +319,12 @@ const noteApp = (function () {
     };
 })();
 noteApp.renderProject();
+
+const str = `
+The system call is typically implemented as a special trap instruction, 
+which signals the CPU to switch from user mode to kernel mode. This instruction 
+is designed to safely transition control to the OS.
+
+`;
+
+console.log(str.slice(0, str.length / 2));
