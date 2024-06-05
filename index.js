@@ -1,3 +1,5 @@
+import dateFunc from "/date.js";
+
 const noteApp = (function () {
     const addProjectBtn = document.querySelector(".add-project-btn");
     const projectLists = document.querySelector(".project-lists");
@@ -15,6 +17,15 @@ const noteApp = (function () {
 
     let selectProjectId = localStorage.getItem(local_storage_selected_key);
     // localStorage.clear();
+
+    function updateUI(project) {
+        localStorage.setItem(local_storage_key, JSON.stringify(storageArray));
+        localStorage.setItem(local_storage_selected_key, selectProjectId);
+    }
+
+    addProjectBtn.addEventListener("click", (e) => {
+        loadInputField("confirm-btn", "cancel-btn", "input-folder");
+    });
 
     // project list section
     projectLists.addEventListener("click", (e) => {
@@ -35,6 +46,7 @@ const noteApp = (function () {
             console.log(liElement);
 
             displayProject(value);
+            emptyNoteSection();
 
             console.log(value);
         }
@@ -99,9 +111,44 @@ const noteApp = (function () {
         }
     });
 
-    function updateUI(project) {
-        localStorage.setItem(local_storage_key, JSON.stringify(storageArray));
-        localStorage.setItem(local_storage_selected_key, selectProjectId);
+    addNewNotes.addEventListener("click", (e) => {
+        console.log(e.target);
+        loadNotesTextArea();
+    });
+
+    displayNoteSection.addEventListener("click", (e) => {
+        const target = e.target;
+        // console.log(target);
+        if (target.classList.contains("save-note")) {
+            saveNoteFunc();
+            updateUI();
+        }
+
+        if (target.classList.contains("cancel-note")) {
+            emptyNoteSection();
+        }
+    });
+
+    function emptyNoteSection() {
+        displayNoteSection.innerHTML = "";
+    }
+
+    function saveNoteFunc() {
+        const noteText = document.querySelector(".note-text");
+        const id = parseInt(selectProjectId);
+        const [value] = filterStorage(id);
+        const noteArray = value.contents;
+
+        if (noteText.value === "") return;
+
+        const noteObject = createNoteCard(noteText.value);
+
+        noteArray.push(noteObject);
+        displayProject(value);
+        noteText.value = "";
+        emptyNoteSection();
+
+        console.log(value);
     }
 
     function selectItem() {
@@ -123,18 +170,15 @@ const noteApp = (function () {
         return {
             projectName: projectName,
             id: Date.now(),
-            contents: [
-                {
-                    noteTitle: "Animals",
-                    noteContent: "I love animals they are awesome",
-                    id: Date.now() + 1,
-                },
-                {
-                    noteTitle: "Animals",
-                    noteContent: "I love animals they are awesome",
-                    id: Date.now() + 1,
-                },
-            ],
+            contents: [],
+        };
+    }
+    function createNoteCard(noteContent) {
+        return {
+            noteDate: dateFunc(),
+            noteTitle: "Animals",
+            noteContent: noteContent,
+            id: Date.now(),
         };
     }
 
@@ -158,7 +202,8 @@ const noteApp = (function () {
     }
 
     function renderProject() {
-        console.log("selectIdFromRender: ", selectProjectId);
+        const id = parseInt(selectProjectId);
+        const [value] = filterStorage(id);
 
         projectLists.innerHTML = "";
         // console.log(storageArray);
@@ -166,7 +211,9 @@ const noteApp = (function () {
         storageArray.forEach(function (item) {
             projectLists.innerHTML += listCard(item.projectName, item.id);
         });
+
         selectItem();
+        displayProject(value);
     }
 
     function filterStorage(num) {
@@ -199,14 +246,10 @@ const noteApp = (function () {
         projectLists.innerHTML = inputFieldHtml;
     }
 
-    addProjectBtn.addEventListener("click", (e) => {
-        loadInputField("confirm-btn", "cancel-btn", "input-folder");
-    });
-
     function displayNoteCards(note) {
         return `
         <div class="note-card">
-        <h3 class="date-made">20 Apr</h3>
+        <h3 class="date-made">${note.noteDate}</h3>
         <h2 class="card-heading">${note.noteTitle}</h2>
         <p class="card-para">
             ${note.noteContent}
@@ -221,6 +264,9 @@ const noteApp = (function () {
     }
 
     function displayProject(project) {
+        console.log(project);
+        if (project === undefined) return;
+
         noteHeader.textContent = `${project.projectName}`;
         noteCards.innerHTML = "";
 
@@ -256,13 +302,6 @@ const noteApp = (function () {
         `;
         displayNoteSection.innerHTML = html;
     }
-
-    addNewNotes.addEventListener("click", (e) => {
-        console.log(e.target);
-        loadNotesTextArea();
-    });
-
-    displayNoteSection.addEventListener("click", (e) => {});
 
     return {
         renderProject: renderProject,
