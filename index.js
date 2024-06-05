@@ -111,6 +111,23 @@ const noteApp = (function () {
         }
     });
 
+    noteCards.addEventListener("click", (e) => {
+        // console.log(e.target);
+        const noteCardElement = e.target.closest("div.note-card");
+        if (noteCardElement) {
+            const projectId = parseInt(selectProjectId);
+            const [projectValue] = filterStorage(projectId);
+
+            // note values
+            const noteId = parseInt(noteCardElement.dataset.id);
+            const [noteValue] = filterNoteContent(
+                projectValue.contents,
+                noteId
+            );
+            displayNoteInfo(noteValue);
+        }
+    });
+
     addNewNotes.addEventListener("click", (e) => {
         console.log(e.target);
         loadNotesTextArea();
@@ -128,6 +145,22 @@ const noteApp = (function () {
             emptyNoteSection();
         }
     });
+
+    function displayNoteInfo(note) {
+        console.log(note);
+        displayNoteSection.innerHTML = " ";
+        const noteText = `
+        <div class="display-note-container">
+        <div class="note-info">${note.noteContent}</div>
+        <div class="display-note-btns">
+            <button class="note-edit">Edit Note</button>
+            <button class="note-delete">Delete Note</button>
+        </div>
+        </div>
+        
+        `;
+        displayNoteSection.innerHTML = noteText;
+    }
 
     function emptyNoteSection() {
         displayNoteSection.innerHTML = "";
@@ -223,6 +256,13 @@ const noteApp = (function () {
 
         return value;
     }
+    function filterNoteContent(arrValue, id) {
+        const value = arrValue.filter(function (arrVal) {
+            // console.log(arrVal);
+            return arrVal.id == id;
+        });
+        return value;
+    }
 
     function loadInputField(
         confirm,
@@ -248,18 +288,17 @@ const noteApp = (function () {
 
     function displayNoteCards(note) {
         // manipulating note inputs
-        const partOfContent = note.noteContent.slice(
-            0,
-            note.noteContent.length / 3
-        );
+        const partOfContent = note.noteContent.slice(0, 100);
         const content =
             note.noteContent.length >= 90
                 ? `${partOfContent}...`
                 : note.noteContent;
 
+        // console.log(note);
+
         // return inputs
         return `
-        <div class="note-card">
+        <div class="note-card" data-id="${note.id}">
         <h3 class="date-made">${note.noteDate}</h3>
         <h2 class="card-heading">${note.noteTitle}</h2>
         <p class="card-para">
@@ -319,12 +358,3 @@ const noteApp = (function () {
     };
 })();
 noteApp.renderProject();
-
-const str = `
-The system call is typically implemented as a special trap instruction, 
-which signals the CPU to switch from user mode to kernel mode. This instruction 
-is designed to safely transition control to the OS.
-
-`;
-
-console.log(str.slice(0, str.length / 2));
