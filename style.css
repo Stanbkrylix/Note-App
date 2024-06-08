@@ -158,11 +158,6 @@ body {
     font-size: 1.2em;
 }
 
-.add-project span {
-}
-.add-project-btn {
-}
-
 /* Note sectionn */
 
 .notes-section {
@@ -261,6 +256,38 @@ body {
 }
 .display-btns button:hover {
     border: 0.2rem solid #1d2326;
+}
+
+.display-note-container {
+    font-size: 1.8em;
+    line-height: 1.1em;
+    letter-spacing: 0.06rem;
+    background-color: #313b41;
+    padding: 1rem;
+    border-radius: 0.5rem;
+}
+.note-info {
+    margin-bottom: 1.5rem;
+}
+.display-note-btns {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+.note-edit,
+.note-delete {
+    width: 48%;
+    padding: 0.4rem 0.8rem;
+    border-radius: 0.5rem;
+    font-size: 0.8em;
+    cursor: pointer;
+    background-color: #313b41;
+    color: #ffffff;
+}
+
+.note-edit:hover,
+.note-delete:hover {
+    border: solid #1d2326 2px;
 }
 
 .select-project {
