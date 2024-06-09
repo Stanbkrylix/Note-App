@@ -10,17 +10,20 @@ const noteApp = (function () {
     const noteCards = document.querySelector(".note-cards");
 
     const local_storage_key = "project_item";
-    const local_storage_selected_key = "selected_project";
+    const local_storage_selected_note_key = "note_item";
+    const local_storage_selected_proj_key = "selected_project";
 
     let storageArray =
         JSON.parse(localStorage.getItem(local_storage_key)) || [];
 
-    let selectProjectId = localStorage.getItem(local_storage_selected_key);
+    let selectProjectId = localStorage.getItem(local_storage_selected_proj_key);
+    let selectedNoteID = localStorage.getItem(local_storage_selected_note_key);
     // localStorage.clear();
 
     function updateUI(project) {
         localStorage.setItem(local_storage_key, JSON.stringify(storageArray));
-        localStorage.setItem(local_storage_selected_key, selectProjectId);
+        localStorage.setItem(local_storage_selected_proj_key, selectProjectId);
+        localStorage.setItem(local_storage_selected_note_key, selectedNoteID);
     }
 
     addProjectBtn.addEventListener("click", (e) => {
@@ -39,6 +42,7 @@ const noteApp = (function () {
             const id = Number.parseInt(liElement.dataset.id);
             const [value] = filterStorage(id);
             selectProjectId = id;
+            selectedNoteID = null;
             updateUI();
             selectItem();
 
@@ -124,7 +128,11 @@ const noteApp = (function () {
                 projectValue.contents,
                 noteId
             );
+            selectedNoteID = noteValue.id;
+            updateUI();
+            selectedNoteItem();
             displayNoteInfo(noteValue);
+            // console.log(noteValue);
         }
     });
 
@@ -148,6 +156,7 @@ const noteApp = (function () {
 
     function displayNoteInfo(note) {
         console.log(note);
+        if (note === undefined) return;
         displayNoteSection.innerHTML = " ";
         const noteText = `
         <div class="display-note-container">
@@ -160,6 +169,19 @@ const noteApp = (function () {
         
         `;
         displayNoteSection.innerHTML = noteText;
+    }
+    function selectedNoteItem() {
+        let cardNotes = document.querySelectorAll(".note-card");
+        cardNotes.forEach((note) => {
+            if (note.classList.contains("select-project")) {
+                note.classList.remove("select-project");
+            }
+
+            if (parseInt(selectedNoteID) == parseInt(note.dataset.id)) {
+                console.log({ note: note.dataset.id, selectedNoteID });
+                note.classList.add("select-project");
+            }
+        });
     }
 
     function emptyNoteSection() {
@@ -249,6 +271,20 @@ const noteApp = (function () {
         displayProject(value);
     }
 
+    function renderNotes() {
+        const projId = parseInt(selectProjectId);
+        const [projValue] = filterStorage(projId);
+        const noteID = parseInt(selectedNoteID);
+        const [noteValue] = filterNoteContent(projValue.contents, noteID);
+        selectedNoteItem();
+        displayNoteInfo(noteValue);
+    }
+
+    function render() {
+        renderProject();
+        renderNotes();
+    }
+
     function filterStorage(num) {
         const value = storageArray.filter(function (item) {
             return item.id == num;
@@ -256,9 +292,9 @@ const noteApp = (function () {
 
         return value;
     }
+
     function filterNoteContent(arrValue, id) {
         const value = arrValue.filter(function (arrVal) {
-            // console.log(arrVal);
             return arrVal.id == id;
         });
         return value;
@@ -314,7 +350,6 @@ const noteApp = (function () {
     }
 
     function displayProject(project) {
-        console.log(project);
         if (project === undefined) return;
 
         noteHeader.textContent = `${project.projectName}`;
@@ -354,7 +389,7 @@ const noteApp = (function () {
     }
 
     return {
-        renderProject: renderProject,
+        render,
     };
 })();
-noteApp.renderProject();
+noteApp.render();
