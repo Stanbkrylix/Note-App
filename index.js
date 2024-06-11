@@ -272,6 +272,9 @@ const noteApp = (function () {
     }
 
     function renderNotes() {
+        const noteIdNotExist = isNaN(parseInt(selectedNoteID));
+        if (noteIdNotExist) return;
+
         const projId = parseInt(selectProjectId);
         const [projValue] = filterStorage(projId);
         const noteID = parseInt(selectedNoteID);
