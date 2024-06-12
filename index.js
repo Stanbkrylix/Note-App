@@ -109,9 +109,10 @@ const noteApp = (function () {
             const [value] = filterStorage(dataId);
             const index = storageArray.indexOf(value);
             storageArray.splice(index, 1);
-            updateUI();
             renderProject();
             resetNoteSection();
+            selectProjectId = null;
+            updateUI();
         }
     });
 
@@ -137,7 +138,11 @@ const noteApp = (function () {
     });
 
     addNewNotes.addEventListener("click", (e) => {
-        console.log(e.target);
+        if (selectProjectId == "null") {
+            selectProjectId = null;
+        }
+        if (selectProjectId == null) return;
+
         loadNotesTextArea();
     });
 
@@ -152,12 +157,26 @@ const noteApp = (function () {
         if (target.classList.contains("cancel-note")) {
             emptyNoteSection();
         }
+
+        if (target.classList.contains("note-edit")) {
+        }
+
+        if (target.classList.contains("note-delete")) {
+            const noteValue = returnNoteValue();
+
+            const projValue = noteValue.projValue.contents;
+            const index = projValue.indexOf(noteValue.noteValue);
+            projValue.splice(index, 1);
+            updateUI();
+            displayProject(noteValue.projValue);
+            emptyNoteSection();
+        }
     });
 
     function displayNoteInfo(note) {
         console.log(note);
         if (note === undefined) return;
-        displayNoteSection.innerHTML = " ";
+        emptyNoteSection();
         const noteText = `
         <div class="display-note-container">
         <div class="note-info">${note.noteContent}</div>
@@ -257,6 +276,7 @@ const noteApp = (function () {
     }
 
     function renderProject() {
+        noteCards.innerHTML = "";
         const id = parseInt(selectProjectId);
         const [value] = filterStorage(id);
 
@@ -271,16 +291,21 @@ const noteApp = (function () {
         displayProject(value);
     }
 
-    function renderNotes() {
-        const noteIdNotExist = isNaN(parseInt(selectedNoteID));
-        if (noteIdNotExist) return;
-
+    function returnNoteValue() {
         const projId = parseInt(selectProjectId);
         const [projValue] = filterStorage(projId);
         const noteID = parseInt(selectedNoteID);
         const [noteValue] = filterNoteContent(projValue.contents, noteID);
+        return { noteValue, projValue };
+    }
+
+    function renderNotes() {
+        const noteIdNotExist = isNaN(parseInt(selectedNoteID));
+        if (noteIdNotExist) return;
+
+        const noteValue = returnNoteValue();
         selectedNoteItem();
-        displayNoteInfo(noteValue);
+        displayNoteInfo(noteValue.noteValue);
     }
 
     function render() {
