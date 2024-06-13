@@ -158,9 +158,6 @@ const noteApp = (function () {
             emptyNoteSection();
         }
 
-        if (target.classList.contains("note-edit")) {
-        }
-
         if (target.classList.contains("note-delete")) {
             const noteValue = returnNoteValue();
 
@@ -170,6 +167,26 @@ const noteApp = (function () {
             updateUI();
             displayProject(noteValue.projValue);
             emptyNoteSection();
+        }
+
+        if (target.classList.contains("note-edit")) {
+            const noteValue = returnNoteValue();
+
+            const projValue = noteValue.projValue.contents;
+            const index = projValue.indexOf(noteValue.noteValue);
+            const htmlValue = projValue[index].noteContent;
+            loadNotesEditText(htmlValue);
+        }
+
+        if (target.classList.contains("cancel-edit-note")) {
+            emptyNoteSection();
+
+            const noteValue = returnNoteValue();
+
+            const projValue = noteValue.projValue.contents;
+            const index = projValue.indexOf(noteValue.noteValue);
+            const htmlValue = projValue[index];
+            displayNoteInfo(htmlValue);
         }
     });
 
@@ -396,26 +413,47 @@ const noteApp = (function () {
 
     // notes areas
     function loadNotesTextArea() {
+        const loadNotesObject = {
+            textClass: "note-text",
+            btn1Class: "save-note",
+            btn2Class: "cancel-note",
+            btn1Text: "Save Note",
+            btn2Text: "Cancel",
+        };
+        loadNoteText(loadNotesObject);
+    }
+
+    function loadNotesEditText(htmlValue) {
+        const loadNotesObject = {
+            textClass: "note-edit-text",
+            btn1Class: "confirm-note",
+            btn2Class: "cancel-edit-note",
+            btn1Text: "Confirm Note",
+            btn2Text: "Cancel",
+        };
+        loadNoteText(loadNotesObject, htmlValue);
+    }
+
+    function loadNoteText(object, htmlValue = "") {
         displayNoteSection.innerHTML = "";
         const html = `
         <div class="tags"></div>
         <div class="display-note">
             <textarea
-                class="note-text"
+                class="${object.textClass}"
                 name="note"
                 id=""
                 value=""
-            ></textarea>
+            >${htmlValue}</textarea>
         </div>
         <div class="display-btns">
-            <button class="save-note">Save Note</button>
-            <button class="cancel-note">Cancel</button>
+            <button class="${object.btn1Class}">${object.btn1Text}</button>
+            <button class="${object.btn2Class}">${object.btn2Text}</button>
         </div>
         
         `;
         displayNoteSection.innerHTML = html;
     }
-
     return {
         render,
     };
