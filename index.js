@@ -20,7 +20,7 @@ const noteApp = (function () {
     let selectedNoteID = localStorage.getItem(local_storage_selected_note_key);
     // localStorage.clear();
 
-    function updateUI(project) {
+    function updateUI() {
         localStorage.setItem(local_storage_key, JSON.stringify(storageArray));
         localStorage.setItem(local_storage_selected_proj_key, selectProjectId);
         localStorage.setItem(local_storage_selected_note_key, selectedNoteID);
@@ -43,16 +43,11 @@ const noteApp = (function () {
             const [value] = filterStorage(id);
             selectProjectId = id;
             selectedNoteID = null;
+
             updateUI();
-            selectItem();
-
-            console.log("selectedId: ", selectProjectId);
-            console.log(liElement);
-
+            selectProjectItem();
             displayProject(value);
             emptyNoteSection();
-
-            console.log(value);
         }
 
         // confirm adding new project
@@ -60,8 +55,8 @@ const noteApp = (function () {
             if (inputFolder.value == "") return;
             const value = createFolder(inputFolder.value);
             storageArray.push(value);
-            updateUI();
             inputFolder.value = "";
+            updateUI();
             renderProject();
         }
 
@@ -117,7 +112,7 @@ const noteApp = (function () {
     });
 
     noteCards.addEventListener("click", (e) => {
-        // console.log(e.target);
+        // to select note card
         const noteCardElement = e.target.closest("div.note-card");
         if (noteCardElement) {
             const projectId = parseInt(selectProjectId);
@@ -133,11 +128,11 @@ const noteApp = (function () {
             updateUI();
             selectedNoteItem();
             displayNoteInfo(noteValue);
-            // console.log(noteValue);
         }
     });
 
     addNewNotes.addEventListener("click", (e) => {
+        // change note id to null if it reads "null"
         if (selectProjectId == "null") {
             selectProjectId = null;
         }
@@ -148,7 +143,7 @@ const noteApp = (function () {
 
     displayNoteSection.addEventListener("click", (e) => {
         const target = e.target;
-        // console.log(target);
+
         if (target.classList.contains("save-note")) {
             saveNoteFunc();
             updateUI();
@@ -178,11 +173,27 @@ const noteApp = (function () {
             loadNotesEditText(htmlValue);
         }
 
+        if (target.classList.contains("confirm-note")) {
+            const noteEditText = document.querySelector(".note-edit-text");
+
+            const noteValue = returnNoteValue();
+            const projValue = noteValue.projValue.contents;
+            const index = projValue.indexOf(noteValue.noteValue);
+            if (noteEditText.value === "") return;
+            projValue[index].noteContent = noteEditText.value;
+
+            updateUI();
+            displayProject(noteValue.projValue);
+            selectedNoteItem();
+            displayNoteInfo(projValue[index]);
+
+            console.log(noteValue);
+        }
+
         if (target.classList.contains("cancel-edit-note")) {
             emptyNoteSection();
 
             const noteValue = returnNoteValue();
-
             const projValue = noteValue.projValue.contents;
             const index = projValue.indexOf(noteValue.noteValue);
             const htmlValue = projValue[index];
@@ -191,7 +202,6 @@ const noteApp = (function () {
     });
 
     function displayNoteInfo(note) {
-        console.log(note);
         if (note === undefined) return;
         emptyNoteSection();
         const noteText = `
@@ -206,6 +216,7 @@ const noteApp = (function () {
         `;
         displayNoteSection.innerHTML = noteText;
     }
+
     function selectedNoteItem() {
         let cardNotes = document.querySelectorAll(".note-card");
         cardNotes.forEach((note) => {
@@ -214,7 +225,6 @@ const noteApp = (function () {
             }
 
             if (parseInt(selectedNoteID) == parseInt(note.dataset.id)) {
-                console.log({ note: note.dataset.id, selectedNoteID });
                 note.classList.add("select-project");
             }
         });
@@ -238,11 +248,9 @@ const noteApp = (function () {
         displayProject(value);
         noteText.value = "";
         emptyNoteSection();
-
-        console.log(value);
     }
 
-    function selectItem() {
+    function selectProjectItem() {
         const list = document.querySelectorAll(".project-lists-list");
 
         list.forEach((listItem) => {
@@ -254,7 +262,6 @@ const noteApp = (function () {
                 listItem.classList.add("select-project");
             }
         });
-        console.log("from selectItem: ", selectProjectId);
     }
 
     function createFolder(projectName) {
@@ -264,6 +271,7 @@ const noteApp = (function () {
             contents: [],
         };
     }
+
     function createNoteCard(noteContent) {
         return {
             noteDate: dateFunc(),
@@ -275,19 +283,19 @@ const noteApp = (function () {
 
     function listCard(text, id) {
         return `
-        <li class="project-lists-list" data-id="${id}">
-        <span class="text">${text}</span>
-        <div class="edit-and-delete">
-        <span class="material-symbols-outlined edit-folder">
-            edit
-        </span>
-        <span
-            class="material-symbols-outlined delete-folder"
-        >
-            delete
-        </span>
-    </div>
-    </li>
+            <li class="project-lists-list" data-id="${id}">
+            <span class="text">${text}</span>
+            <div class="edit-and-delete">
+            <span class="material-symbols-outlined edit-folder">
+                edit
+            </span>
+            <span
+                class="material-symbols-outlined delete-folder"
+            >
+                delete
+            </span>
+            </div>
+            </li>
         
         `;
     }
@@ -304,7 +312,7 @@ const noteApp = (function () {
             projectLists.innerHTML += listCard(item.projectName, item.id);
         });
 
-        selectItem();
+        selectProjectItem();
         displayProject(value);
     }
 
@@ -403,7 +411,6 @@ const noteApp = (function () {
         project.contents.forEach((contents) => {
             noteCards.innerHTML += displayNoteCards(contents);
         });
-        // console.log(project);
     }
 
     function resetNoteSection() {
