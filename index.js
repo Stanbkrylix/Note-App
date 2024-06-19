@@ -426,6 +426,7 @@ const noteApp = (function () {
             btn2Class: "cancel-note",
             btn1Text: "Save Note",
             btn2Text: "Cancel",
+            titleClass: "load-title",
         };
         loadNoteText(loadNotesObject);
     }
@@ -437,6 +438,7 @@ const noteApp = (function () {
             btn2Class: "cancel-edit-note",
             btn1Text: "Confirm Note",
             btn2Text: "Cancel",
+            titleClass: "load-edit-title",
         };
         loadNoteText(loadNotesObject, htmlValue);
     }
@@ -444,11 +446,22 @@ const noteApp = (function () {
     function loadNoteText(object, htmlValue = "") {
         displayNoteSection.innerHTML = "";
         const html = `
-        <div class="tags"></div>
+        <div class="tags-section">
+            <p>Tags: </p>
+            <div class="tag-anchors">
+                <a href="#" class="tag college">College</a>
+                <a href="#" class="tag animal">Animal</a>
+                <a href="#" class="tag car">Car</a>
+            </div>
+        </div>
+        <div class="div-title">
+            <input type="text" class="title-input ${object.titleClass}" placeholder="Add Title">
+        </div>
         <div class="display-note">
             <textarea
-                class="${object.textClass}"
+                class="note-textarea ${object.textClass}"
                 name="note"
+                placeholder="Empty Note"
                 id=""
                 value=""
             >${htmlValue}</textarea>
@@ -461,6 +474,7 @@ const noteApp = (function () {
         `;
         displayNoteSection.innerHTML = html;
     }
+
     return {
         render,
     };

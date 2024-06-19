@@ -269,6 +269,65 @@ body {
     padding: 1rem;
     border-radius: 0.5rem;
 }
+/* 
+
+<div class="div-title">
+            <input type="text" class="title-input ${object.titleClass}" placeholder="Title">
+</div>
+
+*/
+::placeholder {
+    color: white;
+}
+.tags-section {
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: end;
+    gap: 1rem;
+}
+.tags-section p {
+    font-size: 1.5rem;
+}
+.tag-anchors {
+    display: flex;
+    gap: 0.7rem;
+}
+.tag {
+    font-size: 1.5em;
+    text-decoration: none;
+    color: white;
+    background-color: #313b41;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    /* transition: 250ms; */
+}
+.tag:hover {
+    transform: scale(1.1);
+}
+
+.div-title {
+    background-color: #313b41;
+    border-radius: 0.5rem;
+    /* border: none; */
+    margin-bottom: 1rem;
+}
+.title-input {
+    padding: 0.5rem;
+    width: 100%;
+    border: none;
+    border-radius: 0.5rem;
+    background-color: #313b41;
+    color: white;
+    font-size: 1.9em;
+}
+
+.title-input:focus {
+    outline: none;
+}
+.note-textarea {
+    font-size: 1.7em;
+}
+
 .note-info {
     margin-bottom: 1.5rem;
 }
