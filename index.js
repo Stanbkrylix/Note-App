@@ -8,6 +8,7 @@ const noteApp = (function () {
     const displayNoteSection = document.querySelector(".display-note-section");
     const noteHeader = document.querySelector(".note-header");
     const noteCards = document.querySelector(".note-cards");
+    const addTagBtn = document.querySelector(".add-tag-btn");
 
     const local_storage_key = "project_item";
     const local_storage_selected_note_key = "note_item";
@@ -199,7 +200,84 @@ const noteApp = (function () {
             const htmlValue = projValue[index];
             displayNoteInfo(htmlValue);
         }
+
+        if (
+            target.classList.contains("add-tag-btn") ||
+            target.closest(".add-tag-btn")
+        ) {
+            // const button = target.closest(".add-tag-btn");
+            // const noteValue = returnNoteValue();
+            // console.log(noteValue.noteValue);
+            loadTagInputField();
+        }
+
+        if (
+            target.classList.contains("confirm-tag") ||
+            target.closest(".confirm-tag")
+        ) {
+            const tagInput = document.querySelector(".tag-input");
+            const noteValue = returnNoteValue();
+            const tagArray = noteValue.noteValue.tags;
+            if (tagInput.value == "") return;
+
+            console.log(tagInput.value);
+            tagArray.push({ id: Date.now(), tagValue: tagInput.value });
+            console.log(noteValue.noteValue);
+            tagInput.value = "";
+            renderTagInput(tagArray);
+        }
+
+        if (
+            target.classList.contains("cancel-tag") ||
+            target.closest(".cancel-tag")
+        ) {
+            const tagInput = document.querySelector(".tag-input");
+            const noteValue = returnNoteValue();
+            const tagArray = noteValue.noteValue.tags;
+            renderTagInput(tagArray);
+            tagInput.value = "";
+        }
     });
+
+    function renderTagInput(tagArray) {
+        const tagAnchorsDiv = document.querySelector(".tag-anchors");
+        tagAnchorsDiv.innerHTML = "";
+
+        tagArray.forEach((tag) => {
+            const anchor = document.createElement("a");
+            anchor.href = "#";
+            anchor.textContent = tag.tagValue;
+            anchor.setAttribute("class", "tag");
+            anchor.setAttribute("data-id", `${tag.id}`);
+            tagAnchorsDiv.appendChild(anchor);
+            console.log(anchor);
+        });
+    }
+
+    function loadTagInputField() {
+        const tagAnchorsDiv = document.querySelector(".tag-anchors");
+        tagAnchorsDiv.innerHTML = "";
+        const html = `
+            <div class="tag-input-field">
+                <input type="text" name="tag input" id="" value="" class="tag-input" placeholder="Tag Name">
+
+                <div class="tag-btns">
+                    <button class="tag-btn confirm-tag ">
+                        <span class="material-symbols-outlined">
+                            check
+                        </span>
+                    </button>
+                    <button class="tag-btn cancel-tag">
+                        <span class="material-symbols-outlined">
+                            close
+                        </span>
+                    </button>
+                </div>
+            </div>
+        
+        `;
+        tagAnchorsDiv.innerHTML = html;
+    }
 
     function displayNoteInfo(note) {
         if (note === undefined) return;
@@ -278,6 +356,7 @@ const noteApp = (function () {
             noteTitle: "Animals",
             noteContent: noteContent,
             id: Date.now(),
+            tags: [],
         };
     }
 
@@ -449,10 +528,14 @@ const noteApp = (function () {
         <div class="tags-section">
             <p>Tags: </p>
             <div class="tag-anchors">
-                <a href="#" class="tag college">College</a>
-                <a href="#" class="tag animal">Animal</a>
-                <a href="#" class="tag car">Car</a>
+                
             </div>
+            <button class="add-tag-btn">
+                <span class="material-symbols-outlined"> add </span>
+                <p>
+                    Add Tag
+                </p>
+            </button>
         </div>
         <div class="div-title">
             <input type="text" class="title-input ${object.titleClass}" placeholder="Add Title">

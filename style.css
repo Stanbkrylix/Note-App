@@ -159,7 +159,7 @@ body {
     font-size: 1.2em;
 }
 
-/* Note sectionn */
+/* ===================== Note Card section ========================   */
 
 .notes-section {
     /* border: 0.5rem solid #; */
@@ -210,7 +210,8 @@ body {
     margin-bottom: 0.8rem;
 }
 
-/*  display note section */
+/*  ===================== display note section =================== */
+
 .display-note-section {
     flex: 3;
     background-color: #1d2326;
@@ -269,29 +270,84 @@ body {
     padding: 1rem;
     border-radius: 0.5rem;
 }
-/* 
 
-<div class="div-title">
-            <input type="text" class="title-input ${object.titleClass}" placeholder="Title">
-</div>
-
-*/
 ::placeholder {
     color: white;
 }
 .tags-section {
     margin-bottom: 1rem;
     display: flex;
-    align-items: end;
+    align-items: center;
     gap: 1rem;
 }
+
 .tags-section p {
     font-size: 1.5rem;
 }
+
 .tag-anchors {
     display: flex;
     gap: 0.7rem;
+    width: 60%;
+    padding: 0.3rem;
 }
+
+.tag-anchors {
+    overflow-y: hidden;
+    overflow-x: scroll;
+}
+.tag-anchors::-webkit-scrollbar {
+    /* width: 0.04rem; */
+    height: 0.4rem;
+    /* cursor: pointer; */
+}
+.tag-anchors::-webkit-scrollbar-thumb {
+    background-color: #313b41;
+    border-radius: 0 0.5rem 0.5rem 0;
+    cursor: pointer;
+}
+
+.tag-anchors::-webkit-scrollbar-thumb:hover {
+    background-color: #fff;
+}
+
+.tag-input-field {
+    background-color: #313b41;
+    padding: 0.4rem;
+    border-radius: 0.5rem;
+    width: 70%;
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.tag-input {
+    width: 50%;
+    padding: 0.3rem;
+    font-size: 1.4em;
+    border: none;
+    border-radius: 0.5rem;
+    background-color: #313b41;
+    color: white;
+}
+.tag-input:focus {
+    outline: none;
+}
+.tag-btns {
+    display: flex;
+    gap: 0.3rem;
+}
+.tag-btn {
+    color: white;
+    background-color: #313b41;
+    border-radius: 0.5rem;
+    cursor: pointer;
+}
+
+.tag-btn:hover {
+    border: solid 2px #1d2326;
+}
+
 .tag {
     font-size: 1.5em;
     text-decoration: none;
@@ -301,8 +357,23 @@ body {
     border-radius: 0.5rem;
     /* transition: 250ms; */
 }
+
 .tag:hover {
     transform: scale(1.1);
+}
+.add-tag-btn {
+    font-size: 1.1em;
+    display: flex;
+    align-items: center;
+    border: none;
+    padding: 0.3rem;
+    border-radius: 0.5rem;
+    color: white;
+    background-color: #313b41;
+    cursor: pointer;
+}
+.add-tag-btn:hover {
+    transform: scale(1.04);
 }
 
 .div-title {
