@@ -121,10 +121,7 @@ const noteApp = (function () {
 
             // note values
             const noteId = parseInt(noteCardElement.dataset.id);
-            const [noteValue] = filterNoteContent(
-                projectValue.contents,
-                noteId
-            );
+            const [noteValue] = filterContent(projectValue.contents, noteId);
             selectedNoteID = noteValue.id;
             updateUI();
             selectedNoteItem();
@@ -205,9 +202,6 @@ const noteApp = (function () {
             target.classList.contains("add-tag-btn") ||
             target.closest(".add-tag-btn")
         ) {
-            // const button = target.closest(".add-tag-btn");
-            // const noteValue = returnNoteValue();
-            // console.log(noteValue.noteValue);
             loadTagInputField();
         }
 
@@ -224,6 +218,7 @@ const noteApp = (function () {
             tagArray.push({ id: Date.now(), tagValue: tagInput.value });
             console.log(noteValue.noteValue);
             tagInput.value = "";
+            updateUI();
             renderTagInput(tagArray);
         }
 
@@ -234,8 +229,29 @@ const noteApp = (function () {
             const tagInput = document.querySelector(".tag-input");
             const noteValue = returnNoteValue();
             const tagArray = noteValue.noteValue.tags;
+            updateUI();
             renderTagInput(tagArray);
             tagInput.value = "";
+        }
+
+        // Delete tags
+        if (target.classList.contains("tag")) {
+            let check =
+                prompt(`Are you sure you want to delete tags? If so type "Y" or "y" if not type "N" or "n".
+                `);
+            if (check == "n" || check == "N") {
+                return;
+            } else if (check == "y" || check == "Y") {
+                const noteValue = returnNoteValue();
+                const tagArray = noteValue.noteValue.tags;
+                const id = target.dataset.id;
+                const [selectedTag] = filterContent(tagArray, id);
+                const index = tagArray.indexOf(selectedTag);
+                tagArray.splice(index, 1);
+                renderTagInput(tagArray);
+
+                console.log({ index, selectedTag, id, tagArray });
+            }
         }
     });
 
@@ -250,7 +266,7 @@ const noteApp = (function () {
             anchor.setAttribute("class", "tag");
             anchor.setAttribute("data-id", `${tag.id}`);
             tagAnchorsDiv.appendChild(anchor);
-            console.log(anchor);
+            // console.log(anchor);
         });
     }
 
@@ -399,7 +415,7 @@ const noteApp = (function () {
         const projId = parseInt(selectProjectId);
         const [projValue] = filterStorage(projId);
         const noteID = parseInt(selectedNoteID);
-        const [noteValue] = filterNoteContent(projValue.contents, noteID);
+        const [noteValue] = filterContent(projValue.contents, noteID);
         return { noteValue, projValue };
     }
 
@@ -425,7 +441,9 @@ const noteApp = (function () {
         return value;
     }
 
-    function filterNoteContent(arrValue, id) {
+    function filterContent(arrValue, id) {
+        id = Number.parseInt(id);
+
         const value = arrValue.filter(function (arrVal) {
             return arrVal.id == id;
         });
