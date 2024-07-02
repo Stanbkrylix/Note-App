@@ -21,6 +21,8 @@ const noteApp = (function () {
     let selectedNoteID = localStorage.getItem(local_storage_selected_note_key);
     // localStorage.clear();
 
+    let noteObjHasBeenCreated = true;
+
     function updateUI() {
         localStorage.setItem(local_storage_key, JSON.stringify(storageArray));
         localStorage.setItem(local_storage_selected_proj_key, selectProjectId);
@@ -44,7 +46,11 @@ const noteApp = (function () {
             const [value] = filterStorage(id);
             selectProjectId = id;
             selectedNoteID = null;
+            console.log(noteObjHasBeenCreated);
 
+            // console.log("from project");
+            deleteNullNoteFunc();
+            disabledAddBtn();
             updateUI();
             selectProjectItem();
             displayProject(value);
@@ -120,6 +126,8 @@ const noteApp = (function () {
             const [projectValue] = filterStorage(projectId);
 
             // note values
+            deleteNullNoteFunc();
+            disabledAddBtn();
             const noteId = parseInt(noteCardElement.dataset.id);
             const [noteValue] = filterContent(projectValue.contents, noteId);
             selectedNoteID = noteValue.id;
@@ -131,23 +139,80 @@ const noteApp = (function () {
 
     addNewNotes.addEventListener("click", (e) => {
         // change note id to null if it reads "null"
+
         if (selectProjectId == "null") {
             selectProjectId = null;
         }
         if (selectProjectId == null) return;
 
-        loadNotesTextArea();
+        const id = parseInt(selectProjectId);
+        const [value] = filterStorage(id);
+        const noteArray = value.contents;
+        const noteObject = createNoteCard(undefined);
+        addProjectBtn.disabled = true;
+        addProjectBtn.classList.add("disabled");
+        // let check = 0;
+
+        if (noteObjHasBeenCreated) {
+            noteArray.push(noteObject);
+            // noteObject.id = id;
+            console.log({ value, noteArray, selectedNoteID, noteObject });
+            selectedNoteID = noteObject.id;
+
+            loadNotesTextArea();
+            noteObjHasBeenCreated = false;
+        }
     });
+
+    function deleteNullNoteFunc() {
+        const value = returnNoteValue();
+        const noteArray = value.projValue.contents;
+        console.log(noteArray);
+
+        const nullNote = noteArray.filter((note) => {
+            return note.noteContent == undefined;
+        });
+
+        noteObjHasBeenCreated = true;
+
+        if (nullNote.length === 0) return;
+        console.log(typeof nullNote[0].noteContent);
+
+        if (typeof nullNote[0].noteContent === "undefined") {
+            const index = noteArray.indexOf(nullNote[0]);
+            noteArray.splice(index, 1);
+        } else return;
+    }
+
+    function deleteNoteFunc() {
+        if (selectedNoteID == null) return;
+        const value = returnNoteValue();
+        const noteArray = value.projValue.contents;
+        const [currentNoteObject] = filterContent(noteArray, selectedNoteID);
+        const index = noteArray.indexOf(currentNoteObject);
+        noteArray.splice(index, 1);
+    }
+
+    function disabledAddBtn() {
+        if (addProjectBtn.disabled === true) {
+            addProjectBtn.disabled = false;
+            addProjectBtn.classList.remove("disabled");
+        }
+    }
 
     displayNoteSection.addEventListener("click", (e) => {
         const target = e.target;
 
         if (target.classList.contains("save-note")) {
             saveNoteFunc();
-            updateUI();
+            // updateUI();
         }
 
         if (target.classList.contains("cancel-note")) {
+            noteObjHasBeenCreated = true;
+            deleteNoteFunc();
+            // updateUI();
+            disabledAddBtn();
             emptyNoteSection();
         }
 
@@ -211,6 +276,7 @@ const noteApp = (function () {
         ) {
             const tagInput = document.querySelector(".tag-input");
             const noteValue = returnNoteValue();
+            console.log(noteValue);
             const tagArray = noteValue.noteValue.tags;
             if (tagInput.value == "") return;
 
@@ -218,8 +284,8 @@ const noteApp = (function () {
             tagArray.push({ id: Date.now(), tagValue: tagInput.value });
             console.log(noteValue.noteValue);
             tagInput.value = "";
-            updateUI();
             renderTagInput(tagArray);
+            // updateUI();
         }
 
         if (
@@ -229,7 +295,7 @@ const noteApp = (function () {
             const tagInput = document.querySelector(".tag-input");
             const noteValue = returnNoteValue();
             const tagArray = noteValue.noteValue.tags;
-            updateUI();
+            // updateUI();
             renderTagInput(tagArray);
             tagInput.value = "";
         }
@@ -248,6 +314,7 @@ const noteApp = (function () {
                 const [selectedTag] = filterContent(tagArray, id);
                 const index = tagArray.indexOf(selectedTag);
                 tagArray.splice(index, 1);
+                updateUI();
                 renderTagInput(tagArray);
 
                 console.log({ index, selectedTag, id, tagArray });
@@ -330,18 +397,39 @@ const noteApp = (function () {
 
     function saveNoteFunc() {
         const noteText = document.querySelector(".note-text");
+        const noteInputTitle = document.querySelector(".title-input");
+        // const
         const id = parseInt(selectProjectId);
         const [value] = filterStorage(id);
         const noteArray = value.contents;
+        const [currentNoteObject] = filterContent(noteArray, selectedNoteID);
 
-        if (noteText.value === "") return;
+        if (noteInputTitle.value === "") {
+            alert("Note Title Cannot be Empty");
+            return;
+        }
 
-        const noteObject = createNoteCard(noteText.value);
+        if (noteText.value === "") {
+            alert("Note Cannot be Empty");
+            return;
+        }
 
-        noteArray.push(noteObject);
+        if (currentNoteObject.tags.length === 0) {
+            alert("Please enter at least a tag");
+            return;
+        }
+
+        // return;
+        currentNoteObject.noteContent = noteText.value;
+
         displayProject(value);
         noteText.value = "";
         emptyNoteSection();
+        updateUI();
+        noteObjHasBeenCreated = true;
+        disabledAddBtn();
+
+        console.log(noteArray);
     }
 
     function selectProjectItem() {
@@ -474,6 +562,8 @@ const noteApp = (function () {
 
     function displayNoteCards(note) {
         // manipulating note inputs
+        console.log(note);
+        if (note.noteContent == null) return;
         const partOfContent = note.noteContent.slice(0, 100);
         const content =
             note.noteContent.length >= 90
@@ -580,4 +670,5 @@ const noteApp = (function () {
         render,
     };
 })();
+
 noteApp.render();
