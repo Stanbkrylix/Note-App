@@ -55,6 +55,7 @@ const noteApp = (function () {
             selectProjectItem();
             displayProject(value);
             emptyNoteSection();
+            render();
         }
 
         // confirm adding new project
@@ -64,18 +65,19 @@ const noteApp = (function () {
             storageArray.push(value);
             inputFolder.value = "";
             updateUI();
-            renderProject();
+            render();
         }
 
         // cancel adding new folder
         if (target.classList.contains("cancel-btn")) {
-            renderProject();
+            render();
         }
 
         // start editing
         if (target.classList.contains("edit-folder")) {
             const dataId = target.parentElement.parentElement.dataset.id;
             const [value] = filterStorage(dataId);
+
             loadInputField(
                 "input-edit-btn",
                 "input-cancel-edit-btn",
@@ -84,6 +86,7 @@ const noteApp = (function () {
                 value.projectName,
                 value.id
             );
+            // render();
         }
 
         // confirm edit button
@@ -96,13 +99,13 @@ const noteApp = (function () {
 
             displayProject(value);
             updateUI();
-            renderProject();
+            render();
         }
 
         // cancel edit
         if (target.classList.contains("input-cancel-edit-btn")) {
             updateUI();
-            renderProject();
+            render();
         }
 
         // delete projects
@@ -115,6 +118,7 @@ const noteApp = (function () {
             resetNoteSection();
             selectProjectId = null;
             updateUI();
+            render();
         }
     });
 
@@ -128,17 +132,21 @@ const noteApp = (function () {
             // note values
             deleteNullNoteFunc();
             disabledAddBtn();
+
             const noteId = parseInt(noteCardElement.dataset.id);
             const [noteValue] = filterContent(projectValue.contents, noteId);
+
             selectedNoteID = noteValue.id;
             updateUI();
             selectedNoteItem();
             displayNoteInfo(noteValue);
+            render();
         }
     });
 
     addNewNotes.addEventListener("click", (e) => {
-        // change note id to null if it reads "null"
+        // using noteObjHasBeenCreated global variable to create note cards
+        // also so if hasBeenCreated== false can't create new notes
 
         if (selectProjectId == "null") {
             selectProjectId = null;
@@ -149,14 +157,13 @@ const noteApp = (function () {
         const [value] = filterStorage(id);
         const noteArray = value.contents;
         const noteObject = createNoteCard(undefined);
+
+        // disable add new folder button
         addProjectBtn.disabled = true;
         addProjectBtn.classList.add("disabled");
-        // let check = 0;
 
         if (noteObjHasBeenCreated) {
             noteArray.push(noteObject);
-            // noteObject.id = id;
-            console.log({ value, noteArray, selectedNoteID, noteObject });
             selectedNoteID = noteObject.id;
 
             loadNotesTextArea();
@@ -164,40 +171,33 @@ const noteApp = (function () {
         }
     });
 
-    function deleteNullNoteFunc() {
-        const value = returnNoteValue();
-        const noteArray = value.projValue.contents;
-        console.log(noteArray);
+    // To loop inside each tags arrays in each book Card
+    function protoTag(tag) {
+        const holder = document.createElement("div");
 
-        const nullNote = noteArray.filter((note) => {
-            return note.noteContent == undefined;
+        tag.forEach((tag) => {
+            const tagButton = document.createElement("button");
+            tagButton.innerHTML = tag.tagValue;
+            holder.appendChild(tagButton);
         });
-
-        noteObjHasBeenCreated = true;
-
-        if (nullNote.length === 0) return;
-        console.log(typeof nullNote[0].noteContent);
-
-        if (typeof nullNote[0].noteContent === "undefined") {
-            const index = noteArray.indexOf(nullNote[0]);
-            noteArray.splice(index, 1);
-        } else return;
+        return holder;
     }
 
-    function deleteNoteFunc() {
-        if (selectedNoteID == null) return;
-        const value = returnNoteValue();
-        const noteArray = value.projValue.contents;
-        const [currentNoteObject] = filterContent(noteArray, selectedNoteID);
-        const index = noteArray.indexOf(currentNoteObject);
-        noteArray.splice(index, 1);
-    }
+    // to render the tags
+    function renderTagsBtn() {
+        const tagsDiv = document.querySelectorAll(".tags");
+        const noteToRender = returnNoteValue();
+        console.log(noteToRender == undefined);
+        if (noteToRender == undefined) return;
+        const noteArray = noteToRender.projValue;
 
-    function disabledAddBtn() {
-        if (addProjectBtn.disabled === true) {
-            addProjectBtn.disabled = false;
-            addProjectBtn.classList.remove("disabled");
-        }
+        tagsDiv.forEach((tag, index) => {
+            const dataId = parseInt(tag.dataset.id);
+            const tagsArray = noteArray.contents[index];
+            // if (dataId === tagsArray.id) {
+            // }
+            tag.appendChild(protoTag(tagsArray.tags));
+        });
     }
 
     displayNoteSection.addEventListener("click", (e) => {
@@ -205,6 +205,8 @@ const noteApp = (function () {
 
         if (target.classList.contains("save-note")) {
             saveNoteFunc();
+
+            renderTagsBtn();
             // updateUI();
         }
 
@@ -225,6 +227,7 @@ const noteApp = (function () {
             updateUI();
             displayProject(noteValue.projValue);
             emptyNoteSection();
+            render();
         }
 
         if (target.classList.contains("note-edit")) {
@@ -249,6 +252,7 @@ const noteApp = (function () {
             displayProject(noteValue.projValue);
             selectedNoteItem();
             displayNoteInfo(projValue[index]);
+            render();
 
             console.log(noteValue);
         }
@@ -322,6 +326,45 @@ const noteApp = (function () {
         }
     });
 
+    // delete all the note with null value as the note contents
+    function deleteNullNoteFunc() {
+        const value = returnNoteValue();
+        const noteArray = value.projValue.contents;
+        console.log(noteArray);
+
+        const nullNote = noteArray.filter((note) => {
+            return note.noteContent == undefined;
+        });
+
+        noteObjHasBeenCreated = true;
+
+        if (nullNote.length === 0) return;
+
+        if (typeof nullNote[0].noteContent === "undefined") {
+            const index = noteArray.indexOf(nullNote[0]);
+            noteArray.splice(index, 1);
+        } else return;
+    }
+
+    // delete notes
+    function deleteNoteFunc() {
+        if (selectedNoteID == null) return;
+        const value = returnNoteValue();
+        const noteArray = value.projValue.contents;
+        const [currentNoteObject] = filterContent(noteArray, selectedNoteID);
+        const index = noteArray.indexOf(currentNoteObject);
+        noteArray.splice(index, 1);
+    }
+
+    // enable addProject button
+    function disabledAddBtn() {
+        if (addProjectBtn.disabled === true) {
+            addProjectBtn.disabled = false;
+            addProjectBtn.classList.remove("disabled");
+        }
+    }
+
+    // render tags input in tag section
     function renderTagInput(tagArray) {
         const tagAnchorsDiv = document.querySelector(".tag-anchors");
         tagAnchorsDiv.innerHTML = "";
@@ -378,19 +421,6 @@ const noteApp = (function () {
         displayNoteSection.innerHTML = noteText;
     }
 
-    function selectedNoteItem() {
-        let cardNotes = document.querySelectorAll(".note-card");
-        cardNotes.forEach((note) => {
-            if (note.classList.contains("select-project")) {
-                note.classList.remove("select-project");
-            }
-
-            if (parseInt(selectedNoteID) == parseInt(note.dataset.id)) {
-                note.classList.add("select-project");
-            }
-        });
-    }
-
     function emptyNoteSection() {
         displayNoteSection.innerHTML = "";
     }
@@ -398,7 +428,7 @@ const noteApp = (function () {
     function saveNoteFunc() {
         const noteText = document.querySelector(".note-text");
         const noteInputTitle = document.querySelector(".title-input");
-        // const
+
         const id = parseInt(selectProjectId);
         const [value] = filterStorage(id);
         const noteArray = value.contents;
@@ -421,15 +451,30 @@ const noteApp = (function () {
 
         // return;
         currentNoteObject.noteContent = noteText.value;
+        currentNoteObject.noteTitle = noteInputTitle.value;
 
         displayProject(value);
+
         noteText.value = "";
         emptyNoteSection();
         updateUI();
         noteObjHasBeenCreated = true;
         disabledAddBtn();
+        console.log(currentNoteObject);
+    }
 
-        console.log(noteArray);
+    // to select notes or add select class
+    function selectedNoteItem() {
+        let cardNotes = document.querySelectorAll(".note-card");
+        cardNotes.forEach((note) => {
+            if (note.classList.contains("select-project")) {
+                note.classList.remove("select-project");
+            }
+
+            if (parseInt(selectedNoteID) == parseInt(note.dataset.id)) {
+                note.classList.add("select-project");
+            }
+        });
     }
 
     function selectProjectItem() {
@@ -503,6 +548,9 @@ const noteApp = (function () {
         const projId = parseInt(selectProjectId);
         const [projValue] = filterStorage(projId);
         const noteID = parseInt(selectedNoteID);
+
+        // console.log(projValue == undefined);
+        if (projValue == undefined) return;
         const [noteValue] = filterContent(projValue.contents, noteID);
         return { noteValue, projValue };
     }
@@ -519,6 +567,7 @@ const noteApp = (function () {
     function render() {
         renderProject();
         renderNotes();
+        renderTagsBtn();
     }
 
     function filterStorage(num) {
@@ -562,7 +611,7 @@ const noteApp = (function () {
 
     function displayNoteCards(note) {
         // manipulating note inputs
-        console.log(note);
+
         if (note.noteContent == null) return;
         const partOfContent = note.noteContent.slice(0, 100);
         const content =
@@ -570,9 +619,6 @@ const noteApp = (function () {
                 ? `${partOfContent}...`
                 : note.noteContent;
 
-        // console.log(note);
-
-        // return inputs
         return `
         <div class="note-card" data-id="${note.id}">
         <h3 class="date-made">${note.noteDate}</h3>
@@ -580,9 +626,8 @@ const noteApp = (function () {
         <p class="card-para">
             ${content}
         </p>
-        <div class="tags">
-            <button class="college-tag">College</button>
-            <button class="design-tag">Design</button>
+        <div class="tags" data-id="${note.id}">
+        
         </div>
     </div>
         
