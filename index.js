@@ -171,36 +171,6 @@ const noteApp = (function () {
         }
     });
 
-    // To loop inside each tags arrays in each book Card
-    function protoTag(tag) {
-        const holder = document.createElement("div");
-
-        tag.forEach((tag) => {
-            const tagButton = document.createElement("button");
-            tagButton.innerHTML = tag.tagValue;
-            holder.appendChild(tagButton);
-        });
-        return holder;
-    }
-
-    // to render the tags
-    function renderTagsBtn() {
-        const tagsDiv = document.querySelectorAll(".tags");
-        const noteToRender = returnNoteValue();
-        console.log(noteToRender == undefined);
-        if (noteToRender == undefined) return;
-        const noteArray = noteToRender.projValue;
-
-        tagsDiv.forEach((tag, index) => {
-            const dataId = parseInt(tag.dataset.id);
-            const tagsArray = noteArray.contents[index];
-            // if (dataId === tagsArray.id) {
-            // }
-            tag.innerHTML = "";
-            tag.appendChild(protoTag(tagsArray.tags));
-        });
-    }
-
     displayNoteSection.addEventListener("click", (e) => {
         const target = e.target;
 
@@ -332,6 +302,36 @@ const noteApp = (function () {
             }
         }
     });
+
+    // To loop inside each tags arrays in each book Card
+    function protoTag(tag) {
+        const holder = document.createElement("div");
+
+        tag.forEach((tag) => {
+            const tagButton = document.createElement("button");
+            tagButton.innerHTML = tag.tagValue;
+            holder.appendChild(tagButton);
+        });
+        return holder;
+    }
+
+    // to render the tags
+    function renderTagsBtn() {
+        const tagsDiv = document.querySelectorAll(".tags");
+        const noteToRender = returnNoteValue();
+        console.log(noteToRender == undefined);
+        if (noteToRender == undefined) return;
+        const noteArray = noteToRender.projValue;
+
+        tagsDiv.forEach((tag, index) => {
+            const dataId = parseInt(tag.dataset.id);
+            const tagsArray = noteArray.contents[index];
+            // if (dataId === tagsArray.id) {
+            // }
+            tag.innerHTML = "";
+            tag.appendChild(protoTag(tagsArray.tags));
+        });
+    }
 
     // delete all the note with null value as the note contents
     function deleteNullNoteFunc() {
@@ -670,6 +670,7 @@ const noteApp = (function () {
         loadNoteText(loadNotesObject);
     }
 
+    // notes edit
     function loadNotesEditText(htmlValue) {
         const loadNotesObject = {
             textClass: "note-edit-text",
