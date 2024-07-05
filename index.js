@@ -196,6 +196,7 @@ const noteApp = (function () {
             const tagsArray = noteArray.contents[index];
             // if (dataId === tagsArray.id) {
             // }
+            tag.innerHTML = "";
             tag.appendChild(protoTag(tagsArray.tags));
         });
     }
@@ -236,17 +237,23 @@ const noteApp = (function () {
             const projValue = noteValue.projValue.contents;
             const index = projValue.indexOf(noteValue.noteValue);
             const htmlValue = projValue[index].noteContent;
-            loadNotesEditText(htmlValue);
+            console.log(projValue[index]);
+            const tagArray = projValue[index].tags;
+            console.log(tagArray);
+            loadNotesEditText(projValue[index]);
+            renderTagInput(tagArray);
         }
 
         if (target.classList.contains("confirm-note")) {
             const noteEditText = document.querySelector(".note-edit-text");
+            const loadEditTitle = document.querySelector(".load-edit-title");
 
             const noteValue = returnNoteValue();
             const projValue = noteValue.projValue.contents;
             const index = projValue.indexOf(noteValue.noteValue);
             if (noteEditText.value === "") return;
             projValue[index].noteContent = noteEditText.value;
+            projValue[index].noteTitle = loadEditTitle.value;
 
             updateUI();
             displayProject(noteValue.projValue);
@@ -675,7 +682,7 @@ const noteApp = (function () {
         loadNoteText(loadNotesObject, htmlValue);
     }
 
-    function loadNoteText(object, htmlValue = "") {
+    function loadNoteText(object, currentObjValue = "") {
         displayNoteSection.innerHTML = "";
         const html = `
         <div class="tags-section">
@@ -691,7 +698,13 @@ const noteApp = (function () {
             </button>
         </div>
         <div class="div-title">
-            <input type="text" class="title-input ${object.titleClass}" placeholder="Add Title">
+            <input type="text" class="title-input ${
+                object.titleClass
+            }" placeholder="Add Title" value="${
+            currentObjValue.noteTitle == undefined
+                ? ""
+                : currentObjValue.noteTitle
+        }">
         </div>
         <div class="display-note">
             <textarea
@@ -700,7 +713,11 @@ const noteApp = (function () {
                 placeholder="Empty Note"
                 id=""
                 value=""
-            >${htmlValue}</textarea>
+            >${
+                currentObjValue.noteContent == undefined
+                    ? ""
+                    : currentObjValue.noteContent
+            }</textarea>
         </div>
         <div class="display-btns">
             <button class="${object.btn1Class}">${object.btn1Text}</button>
