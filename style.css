@@ -395,6 +395,16 @@ body {
 .title-input:focus {
     outline: none;
 }
+.note-tags-div {
+    border-bottom: #ffffff 1px solid;
+    margin-bottom: 0.8rem;
+    padding-bottom: 0.5rem;
+}
+.note-title-info {
+    margin-bottom: 0.6rem;
+    text-align: center;
+}
+
 .note-textarea {
     font-size: 1.7em;
 }

@@ -122,9 +122,12 @@ const noteApp = (function () {
         }
     });
 
+    // ============================================================================
+    // Note card selection
     noteCards.addEventListener("click", (e) => {
         // to select note card
         const noteCardElement = e.target.closest("div.note-card");
+
         if (noteCardElement) {
             const projectId = parseInt(selectProjectId);
             const [projectValue] = filterStorage(projectId);
@@ -144,6 +147,8 @@ const noteApp = (function () {
         }
     });
 
+    // =========================================================================
+    // Add new notes button functionality
     addNewNotes.addEventListener("click", (e) => {
         // using noteObjHasBeenCreated global variable to create note cards
         // also so if hasBeenCreated== false can't create new notes
@@ -171,6 +176,8 @@ const noteApp = (function () {
         }
     });
 
+    // ========================================================================
+    // display sect add event listener
     displayNoteSection.addEventListener("click", (e) => {
         const target = e.target;
 
@@ -304,7 +311,7 @@ const noteApp = (function () {
     });
 
     // To loop inside each tags arrays in each book Card
-    function protoTag(tag) {
+    function showTags(tag) {
         const holder = document.createElement("div");
 
         tag.forEach((tag) => {
@@ -324,12 +331,11 @@ const noteApp = (function () {
         const noteArray = noteToRender.projValue;
 
         tagsDiv.forEach((tag, index) => {
-            const dataId = parseInt(tag.dataset.id);
             const tagsArray = noteArray.contents[index];
             // if (dataId === tagsArray.id) {
             // }
             tag.innerHTML = "";
-            tag.appendChild(protoTag(tagsArray.tags));
+            tag.appendChild(showTags(tagsArray.tags));
         });
     }
 
@@ -412,11 +418,37 @@ const noteApp = (function () {
         tagAnchorsDiv.innerHTML = html;
     }
 
+    function displayTagsInfo() {
+        const noteTagsBtnDiv = document.querySelector(".note-tags-btn-div");
+        const noteValue = returnNoteValue();
+
+        if (noteValue.noteValue == undefined) return;
+        const tagArray = noteValue.noteValue.tags;
+
+        noteTagsBtnDiv.innerHTML = "";
+        tagArray.forEach((tag) => {
+            const tagAnchor = document.createElement("button");
+            tagAnchor.innerHTML = tag.tagValue;
+            noteTagsBtnDiv.appendChild(tagAnchor);
+        });
+    }
+
     function displayNoteInfo(note) {
         if (note === undefined) return;
         emptyNoteSection();
         const noteText = `
+
         <div class="display-note-container">
+
+        <div class="note-tags-div" >
+            <span>Tags:</span>
+            <div class="note-tags-btn-div" >
+              
+            </div>
+        </div>
+        <div class="note-title-info">
+            <h1>${note.noteTitle}</h1>
+        </div>
         <div class="note-info">${note.noteContent}</div>
         <div class="display-note-btns">
             <button class="note-edit">Edit Note</button>
@@ -575,6 +607,7 @@ const noteApp = (function () {
         renderProject();
         renderNotes();
         renderTagsBtn();
+        displayTagsInfo();
     }
 
     function filterStorage(num) {
