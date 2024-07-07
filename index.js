@@ -8,7 +8,7 @@ const noteApp = (function () {
     const displayNoteSection = document.querySelector(".display-note-section");
     const noteHeader = document.querySelector(".note-header");
     const noteCards = document.querySelector(".note-cards");
-    const addTagBtn = document.querySelector(".add-tag-btn");
+    const searchBar = document.getElementById("search-bar");
 
     const local_storage_key = "project_item";
     const local_storage_selected_note_key = "note_item";
@@ -32,6 +32,55 @@ const noteApp = (function () {
     addProjectBtn.addEventListener("click", (e) => {
         loadInputField("confirm-btn", "cancel-btn", "input-folder");
     });
+
+    searchBar.addEventListener("input", (e) => {
+        const value = returnNoteValue();
+        const noteArray = value.projValue.contents;
+        const searchVal = searchBar.value.toLowerCase();
+
+        const tagOfNotes = noteArray
+            .map((array) => {
+                return array.tags;
+            })
+            .flatMap((array) => {
+                return array;
+            })
+            .filter((array) => {
+                return array.tagValue.toLowerCase().includes(searchVal);
+            });
+
+        let filteredNotes = filterNotesByTagValue(tagOfNotes, noteArray);
+
+        noteCards.innerHTML = "";
+
+        filteredNotes.forEach((contents) => {
+            noteCards.innerHTML += displayNoteCards(contents);
+        });
+
+        renderSearchTags(filteredNotes);
+        emptyNoteSection();
+    });
+
+    // filter function by comparing the filtered note array with array of all project tags
+    function filterNotesByTagValue(tagValuesToCompare, notes) {
+        return notes.filter((note) => {
+            return note.tags.some((tagObj) => {
+                return tagValuesToCompare.some((tag) => {
+                    return tag.tagValue === tagObj.tagValue;
+                });
+            });
+        });
+    }
+
+    // render filtered tags
+    function renderSearchTags(noteArray) {
+        const tagsDiv = document.querySelectorAll(".tags");
+
+        noteArray.forEach((tag, index) => {
+            tagsDiv.innerHTML = "";
+            tagsDiv[index].appendChild(showTags(tag.tags));
+        });
+    }
 
     // project list section
     projectLists.addEventListener("click", (e) => {
@@ -144,6 +193,8 @@ const noteApp = (function () {
             selectedNoteItem();
             displayNoteInfo(noteValue);
             render();
+            // renderTagsBtn();
+            // displayTagsInfo();
         }
     });
 
@@ -166,12 +217,14 @@ const noteApp = (function () {
         // disable add new folder button
         addProjectBtn.disabled = true;
         addProjectBtn.classList.add("disabled");
+        // selectedNoteItem();
 
         if (noteObjHasBeenCreated) {
             noteArray.push(noteObject);
             selectedNoteID = noteObject.id;
 
             loadNotesTextArea();
+            selectedNoteItem();
             noteObjHasBeenCreated = false;
         }
     });
@@ -191,9 +244,13 @@ const noteApp = (function () {
         if (target.classList.contains("cancel-note")) {
             noteObjHasBeenCreated = true;
             deleteNoteFunc();
+            // const noteValue = returnNoteValue();
             // updateUI();
             disabledAddBtn();
             emptyNoteSection();
+
+            // displayNoteInfo(noteValue.noteValue);
+            console.log("cancel note was click");
         }
 
         if (target.classList.contains("note-delete")) {
@@ -219,6 +276,9 @@ const noteApp = (function () {
             console.log(tagArray);
             loadNotesEditText(projValue[index]);
             renderTagInput(tagArray);
+
+            addProjectBtn.disabled = true;
+            addProjectBtn.classList.add("disabled");
         }
 
         if (target.classList.contains("confirm-note")) {
@@ -239,6 +299,7 @@ const noteApp = (function () {
             render();
 
             console.log(noteValue);
+            disabledAddBtn();
         }
 
         if (target.classList.contains("cancel-edit-note")) {
@@ -249,6 +310,9 @@ const noteApp = (function () {
             const index = projValue.indexOf(noteValue.noteValue);
             const htmlValue = projValue[index];
             displayNoteInfo(htmlValue);
+            // renderTagsBtn();
+            displayTagsInfo();
+            disabledAddBtn();
         }
 
         if (
@@ -315,7 +379,7 @@ const noteApp = (function () {
         const holder = document.createElement("div");
 
         tag.forEach((tag) => {
-            const tagButton = document.createElement("button");
+            const tagButton = document.createElement("a");
             tagButton.innerHTML = tag.tagValue;
             holder.appendChild(tagButton);
         });
@@ -326,14 +390,14 @@ const noteApp = (function () {
     function renderTagsBtn() {
         const tagsDiv = document.querySelectorAll(".tags");
         const noteToRender = returnNoteValue();
-        console.log(noteToRender == undefined);
+
         if (noteToRender == undefined) return;
         const noteArray = noteToRender.projValue;
 
         tagsDiv.forEach((tag, index) => {
             const tagsArray = noteArray.contents[index];
-            // if (dataId === tagsArray.id) {
-            // }
+            // const dataId = tag.dataset.id;
+
             tag.innerHTML = "";
             tag.appendChild(showTags(tagsArray.tags));
         });
@@ -427,7 +491,7 @@ const noteApp = (function () {
 
         noteTagsBtnDiv.innerHTML = "";
         tagArray.forEach((tag) => {
-            const tagAnchor = document.createElement("button");
+            const tagAnchor = document.createElement("a");
             tagAnchor.innerHTML = tag.tagValue;
             noteTagsBtnDiv.appendChild(tagAnchor);
         });
@@ -600,6 +664,7 @@ const noteApp = (function () {
 
         const noteValue = returnNoteValue();
         selectedNoteItem();
+        // console.log();
         displayNoteInfo(noteValue.noteValue);
     }
 
@@ -608,6 +673,7 @@ const noteApp = (function () {
         renderNotes();
         renderTagsBtn();
         displayTagsInfo();
+        searchBar.value = "";
     }
 
     function filterStorage(num) {
@@ -677,6 +743,7 @@ const noteApp = (function () {
     function displayProject(project) {
         if (project === undefined) return;
 
+        console.log(project.contents);
         noteHeader.textContent = `${project.projectName}`;
         noteCards.innerHTML = "";
 

@@ -14,6 +14,7 @@ body {
 }
 .article {
     width: 1000px;
+    height: 50%;
     margin: 0 auto;
     padding: 2rem;
     display: flex;
@@ -22,7 +23,7 @@ body {
 .project-section {
     border: 1px solid black;
     padding: 1.5rem;
-    height: 40vh;
+    /* height: 40vh; */
     color: white;
     background-color: #1d2326;
     display: flex;
@@ -185,6 +186,7 @@ body {
 .note-cards {
     display: flex;
     flex-direction: column;
+    height: 500px;
     gap: 1.5rem;
     padding: 0 0.4rem;
 }
@@ -291,23 +293,68 @@ body {
     width: 60%;
     padding: 0.3rem;
 }
+.tags div {
+    display: flex;
+    gap: 0.2rem;
+    width: 215px;
+    padding: 0.4rem 0;
+}
 
-.tag-anchors {
+.tags div a,
+.note-tags-btn-div a {
+    font-size: 1.4em;
+    font-weight: bold;
+    /* font-style: ; */
+    border: none;
+    padding: 0.4rem;
+    border-radius: 0.5rem;
+    background-color: #fff;
+    color: #313b41;
+}
+
+.tag-anchors,
+.tags div,
+.note-tags-div div {
     overflow-y: hidden;
     overflow-x: scroll;
 }
-.tag-anchors::-webkit-scrollbar {
+
+.note-tags-div {
+    display: flex;
+    /* justify-content: center; */
+    align-items: center;
+    gap: 0.4rem;
+}
+.note-tags-div div {
+    display: flex;
+    gap: 0.3rem;
+    width: 320px;
+    padding: 0.2rem;
+}
+
+.note-tags-btn-div a {
+    font-size: 1em;
+    padding: 0.3rem;
+}
+
+.tag-anchors::-webkit-scrollbar,
+.tags div::-webkit-scrollbar,
+.note-tags-div div::-webkit-scrollbar {
     /* width: 0.04rem; */
-    height: 0.4rem;
+    height: 0.3rem;
     /* cursor: pointer; */
 }
-.tag-anchors::-webkit-scrollbar-thumb {
+.tag-anchors::-webkit-scrollbar-thumb,
+.tags div::-webkit-scrollbar-thumb,
+.note-tags-div div::-webkit-scrollbar-thumb {
     background-color: #313b41;
     border-radius: 0 0.5rem 0.5rem 0;
     cursor: pointer;
 }
 
-.tag-anchors::-webkit-scrollbar-thumb:hover {
+.tag-anchors::-webkit-scrollbar-thumb:hover,
+.tags div::-webkit-scrollbar-thumb:hover,
+.note-tags-div div::-webkit-scrollbar-thumb:hover {
     background-color: #fff;
 }
 
@@ -407,10 +454,12 @@ body {
 
 .note-textarea {
     font-size: 1.7em;
+    height: 440px;
 }
 
 .note-info {
     margin-bottom: 1.5rem;
+    height: 440px;
 }
 .display-note-btns {
     display: flex;
@@ -445,8 +494,9 @@ body {
     overflow-y: scroll;
     overflow-x: hidden;
     /* scroll-snap-type: y mandatory; */
-    height: 408px;
+    /* height: 440px; */
 }
+
 .project-lists div,
 .note-cards div {
     /* scroll-snap-align: start; */
