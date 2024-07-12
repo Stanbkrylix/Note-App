@@ -21,22 +21,12 @@
                         id="search-bar"
                         placeholder="Search notes..."
                     />
+                    <span
+                        class="material-symbols-outlined close-project-section"
+                        >close</span
+                    >
                 </div>
-                <ul class="project-lists">
-                    <!-- <li class="project-lists-list">
-                        <span class="text">My Notes</span>
-                        <div class="edit-and-delete">
-                            <span class="material-symbols-outlined edit-folder">
-                                edit
-                            </span>
-                            <span
-                                class="material-symbols-outlined delete-folder"
-                            >
-                                delete
-                            </span>
-                        </div>
-                    </li> -->
-                </ul>
+                <ul class="project-lists"></ul>
 
                 <div class="add-project">
                     <button class="add-project-btn add-btn">
@@ -48,6 +38,15 @@
 
             <!-- note sections  -->
             <section class="notes-section">
+                <div class="left-and-right-btns">
+                    <span class="material-symbols-outlined left-arrow">
+                        arrow_left_alt
+                    </span>
+                    <span class="material-symbols-outlined right-arrow">
+                        arrow_right_alt
+                    </span>
+                </div>
+
                 <div class="note-heading">
                     <h1 class="note-header">My Notes</h1>
                 </div>
@@ -99,39 +98,7 @@
                     </div>
                 </div>
             </section>
-            <section class="display-note-section">
-                <!-- <h1 class="note-title">Notes Title</h1>
-                <p class="display-note-p">
-                    Date: <span class="date-save"> April 20</span>
-                </p>
-                <div class="tags"></div>
-                <p class="display-note">
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                    Itaque tempore odit quia. Eos, at maiores inventore, in eius
-                    excepturi temporibus officia explicabo qui voluptatum earum
-                    nostrum est maxime distinctio adipisci?
-                </p>
-
-                <div class="display-edit-btn">
-                    <button class="edit-note">Edit Note</button>
-                </div> -->
-
-                <!-- Text area -->
-
-                <!-- <div class="tags"></div>
-                <div class="display-note">
-                    <textarea
-                        class="note-text"
-                        name="note"
-                        id=""
-                        value=""
-                    ></textarea>
-                </div>
-                <div class="display-btns">
-                    <button class="save-note">Save Note</button>
-                    <button class="cancel-note">Cancel</button>
-                </div> -->
-            </section>
+            <section class="display-note-section"></section>
 
             <!-- delete template when finish -->
             <template id="input-field-template">
@@ -176,6 +143,5 @@
             </template>
         </article>
         <script type="module" src="index.js"></script>
-        <!-- <script type="module" src="local.js"></script> -->
     </body>
 </html>

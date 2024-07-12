@@ -1,5 +1,7 @@
 import dateFunc from "/date.js";
+import mobileFunctionalities from "/mobile.js";
 
+mobileFunctionalities();
 const noteApp = (function () {
     const addProjectBtn = document.querySelector(".add-project-btn");
     const projectLists = document.querySelector(".project-lists");
@@ -503,6 +505,11 @@ const noteApp = (function () {
         const noteText = `
 
         <div class="display-note-container">
+        <div class="go-back-btn-div">
+            <span class="material-symbols-outlined display-left-btn">
+                arrow_left_alt
+            </span>
+        </div>
 
         <div class="note-tags-div" >
             <span>Tags:</span>
@@ -786,6 +793,7 @@ const noteApp = (function () {
     function loadNoteText(object, currentObjValue = "") {
         displayNoteSection.innerHTML = "";
         const html = `
+      
         <div class="tags-section">
             <p>Tags: </p>
             <div class="tag-anchors">
