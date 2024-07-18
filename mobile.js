@@ -5,43 +5,22 @@ export default function mobileFunctionalities() {
     const notesSection = document.querySelector(".notes-section");
     const displayNoteSection = document.querySelector(".display-note-section");
 
-    const leftArrow = document.querySelector(".left-arrow");
+    const overlayModal = document.querySelector(".overlay-modal");
+    const menu = document.querySelector(".menu-btn");
     const rightArrow = document.querySelector(".right-arrow");
-
-    projectSection.classList.add("translate-left");
-    notesSection.classList.add("translate-left-notes");
+    const displayLeftArrow = document.querySelector(".display-left-btn");
 
     closeProjectBtn.addEventListener("click", (e) => {
-        if (!projectSection.classList.contains("translate-left")) {
-            projectSection.classList.add("translate-left");
-            notesSection.classList.add("translate-left-notes");
+        if (!projectSection.classList.contains("move-left")) {
+            projectSection.classList.add("move-left");
+            overlayModal.classList.add("move-left");
         }
     });
 
-    // displayNoteSection.classList.add("hidden");
-
-    leftArrow.addEventListener("click", (e) => {
-        if (
-            projectSection.classList.contains("hidden") ||
-            projectSection.classList.contains("translate-left")
-        ) {
-            // projectSection.computedStyleMap.display = "block";
-            projectSection.classList.remove("hidden");
-            projectSection.classList.remove("translate-left");
-            notesSection.classList.remove("translate-left-notes");
+    menu.addEventListener("click", (e) => {
+        if (projectSection.classList.contains("move-left")) {
+            projectSection.classList.remove("move-left");
+            overlayModal.classList.remove("move-left");
         }
     });
-
-    rightArrow.addEventListener("click", (e) => {
-        console.log(e.target);
-        if (displayNoteSection.classList.contains("hidden")) {
-            // notesSection.classList.add("translate-right");
-            // displayNoteSection.classList.remove("hidden");
-            // displayNoteSection.classList.add("translate-left-display-notes");
-            // projectSection.classList.add("translate-left");
-            // notesSection.classList.add("translate-left-notes");
-        }
-    });
-
-    // const
 }

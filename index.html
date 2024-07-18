@@ -12,6 +12,7 @@
     </head>
     <body>
         <article class="article">
+            <div class="overlay-modal"></div>
             <section class="project-section">
                 <div class="search-bar-div">
                     <span class="material-symbols-outlined">search</span>
@@ -39,8 +40,8 @@
             <!-- note sections  -->
             <section class="notes-section">
                 <div class="left-and-right-btns">
-                    <span class="material-symbols-outlined left-arrow">
-                        arrow_left_alt
+                    <span class="material-symbols-outlined menu-btn">
+                        menu
                     </span>
                     <span class="material-symbols-outlined right-arrow">
                         arrow_right_alt
@@ -98,7 +99,14 @@
                     </div>
                 </div>
             </section>
-            <section class="display-note-section"></section>
+            <div class="display-section-wrapper">
+                <div class="go-back-btn-div">
+                    <span class="material-symbols-outlined display-left-btn">
+                        arrow_left_alt
+                    </span>
+                </div>
+                <section class="display-note-section"></section>
+            </div>
 
             <!-- delete template when finish -->
             <template id="input-field-template">

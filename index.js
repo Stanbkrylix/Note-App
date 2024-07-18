@@ -11,6 +11,8 @@ const noteApp = (function () {
     const noteHeader = document.querySelector(".note-header");
     const noteCards = document.querySelector(".note-cards");
     const searchBar = document.getElementById("search-bar");
+    const projectSection = document.querySelector(".project-section");
+    const notesSection = document.querySelector(".notes-section");
 
     const local_storage_key = "project_item";
     const local_storage_selected_note_key = "note_item";
@@ -505,11 +507,7 @@ const noteApp = (function () {
         const noteText = `
 
         <div class="display-note-container">
-        <div class="go-back-btn-div">
-            <span class="material-symbols-outlined display-left-btn">
-                arrow_left_alt
-            </span>
-        </div>
+        
 
         <div class="note-tags-div" >
             <span>Tags:</span>
