@@ -14,6 +14,11 @@ export default function mobileFunctionalities() {
     const rightArrow = document.querySelector(".right-arrow");
     const displayLeftArrow = document.querySelector(".display-left-btn");
 
+    displaySectionWrapper.classList.add("move-right");
+    overlayModal2.classList.add("move-right");
+    projectSection.classList.add("move-left");
+    overlayModal.classList.add("move-left");
+
     closeProjectBtn.addEventListener("click", (e) => {
         if (!projectSection.classList.contains("move-left")) {
             projectSection.classList.add("move-left");
