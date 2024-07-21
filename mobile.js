@@ -1,6 +1,11 @@
 export default function mobileFunctionalities() {
     console.log("from mobile.js");
-    const closeProjectBtn = document.querySelector(".close-project-section");
+    const closeProjectBtnMobile = document.querySelector(
+        ".close-project-section"
+    );
+
+    const menuTabletOpenBtn = document.querySelector(".medium-screen-menu-btn");
+
     const projectSection = document.querySelector(".project-section");
     const notesSection = document.querySelector(".notes-section");
     const displayNoteSection = document.querySelector(".display-note-section");
@@ -19,15 +24,40 @@ export default function mobileFunctionalities() {
     projectSection.classList.add("move-left");
     overlayModal.classList.add("move-left");
 
-    closeProjectBtn.addEventListener("click", (e) => {
-        if (!projectSection.classList.contains("move-left")) {
+    overlayModal.classList.add("move-left-tablet");
+    projectSection.classList.add("move-left-tablet");
+
+    closeProjectBtnMobile.addEventListener("click", (e) => {
+        if (
+            !projectSection.classList.contains("move-left") ||
+            !projectSection.classList.contains("move-left-tablet")
+        ) {
             projectSection.classList.add("move-left");
             overlayModal.classList.add("move-left");
+            projectSection.classList.add("move-left-tablet");
+            overlayModal.classList.add("move-left-tablet");
         }
     });
 
     menu.addEventListener("click", (e) => {
-        if (projectSection.classList.contains("move-left")) {
+        if (
+            projectSection.classList.contains("move-left") ||
+            projectSection.classList.contains("move-left-tablet")
+        ) {
+            projectSection.classList.remove("move-left");
+            projectSection.classList.remove("move-left-tablet");
+            overlayModal.classList.remove("move-left");
+            overlayModal.classList.remove("move-left-tablet");
+        }
+    });
+
+    menuTabletOpenBtn.addEventListener("click", (e) => {
+        if (
+            projectSection.classList.contains("move-left-tablet") ||
+            projectSection.classList.contains("move-left")
+        ) {
+            projectSection.classList.remove("move-left-tablet");
+            overlayModal.classList.remove("move-left-tablet");
             projectSection.classList.remove("move-left");
             overlayModal.classList.remove("move-left");
         }
