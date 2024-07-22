@@ -5,14 +5,11 @@ mobileFunctionalities();
 const noteApp = (function () {
     const addProjectBtn = document.querySelector(".add-project-btn");
     const projectLists = document.querySelector(".project-lists");
-    // const projectListsList = document.querySelector(".project-lists-list");
     const addNewNotes = document.querySelector(".add-notes-btn");
     const displayNoteSection = document.querySelector(".display-note-section");
     const noteHeader = document.querySelector(".note-header");
     const noteCards = document.querySelector(".note-cards");
     const searchBar = document.getElementById("search-bar");
-    const projectSection = document.querySelector(".project-section");
-    const notesSection = document.querySelector(".notes-section");
 
     const local_storage_key = "project_item";
     const local_storage_selected_note_key = "note_item";
@@ -23,7 +20,6 @@ const noteApp = (function () {
 
     let selectProjectId = localStorage.getItem(local_storage_selected_proj_key);
     let selectedNoteID = localStorage.getItem(local_storage_selected_note_key);
-    // localStorage.clear();
 
     let noteObjHasBeenCreated = true;
 
@@ -99,9 +95,7 @@ const noteApp = (function () {
             const [value] = filterStorage(id);
             selectProjectId = id;
             selectedNoteID = null;
-            console.log(noteObjHasBeenCreated);
 
-            // console.log("from project");
             deleteNullNoteFunc();
             disabledAddBtn();
             updateUI();
@@ -139,7 +133,6 @@ const noteApp = (function () {
                 value.projectName,
                 value.id
             );
-            // render();
         }
 
         // confirm edit button
@@ -163,15 +156,22 @@ const noteApp = (function () {
 
         // delete projects
         if (target.classList.contains("delete-folder")) {
-            const dataId = target.parentElement.parentElement.dataset.id;
-            const [value] = filterStorage(dataId);
-            const index = storageArray.indexOf(value);
-            storageArray.splice(index, 1);
-            renderProject();
-            resetNoteSection();
-            selectProjectId = null;
-            updateUI();
-            render();
+            let check =
+                prompt(`Are you sure you want to delete tags? If so type "Y" or "y" if not type "N" or "n".
+            `);
+            if (check == "n" || check == "N") {
+                return;
+            } else if (check == "y" || check == "Y") {
+                const dataId = target.parentElement.parentElement.dataset.id;
+                const [value] = filterStorage(dataId);
+                const index = storageArray.indexOf(value);
+                storageArray.splice(index, 1);
+                renderProject();
+                resetNoteSection();
+                selectProjectId = null;
+                updateUI();
+                render();
+            }
         }
     });
 
@@ -197,8 +197,6 @@ const noteApp = (function () {
             selectedNoteItem();
             displayNoteInfo(noteValue);
             render();
-            // renderTagsBtn();
-            // displayTagsInfo();
         }
     });
 
@@ -221,6 +219,7 @@ const noteApp = (function () {
         // disable add new folder button
         addProjectBtn.disabled = true;
         addProjectBtn.classList.add("disabled");
+
         // selectedNoteItem();
 
         if (noteObjHasBeenCreated) {
@@ -240,21 +239,14 @@ const noteApp = (function () {
 
         if (target.classList.contains("save-note")) {
             saveNoteFunc();
-
             renderTagsBtn();
-            // updateUI();
         }
 
         if (target.classList.contains("cancel-note")) {
             noteObjHasBeenCreated = true;
             deleteNoteFunc();
-            // const noteValue = returnNoteValue();
-            // updateUI();
             disabledAddBtn();
             emptyNoteSection();
-
-            // displayNoteInfo(noteValue.noteValue);
-            console.log("cancel note was click");
         }
 
         if (target.classList.contains("note-delete")) {
@@ -274,10 +266,7 @@ const noteApp = (function () {
 
             const projValue = noteValue.projValue.contents;
             const index = projValue.indexOf(noteValue.noteValue);
-            const htmlValue = projValue[index].noteContent;
-            console.log(projValue[index]);
             const tagArray = projValue[index].tags;
-            console.log(tagArray);
             loadNotesEditText(projValue[index]);
             renderTagInput(tagArray);
 
@@ -302,7 +291,6 @@ const noteApp = (function () {
             displayNoteInfo(projValue[index]);
             render();
 
-            console.log(noteValue);
             disabledAddBtn();
         }
 
@@ -314,7 +302,6 @@ const noteApp = (function () {
             const index = projValue.indexOf(noteValue.noteValue);
             const htmlValue = projValue[index];
             displayNoteInfo(htmlValue);
-            // renderTagsBtn();
             displayTagsInfo();
             disabledAddBtn();
         }
@@ -332,16 +319,12 @@ const noteApp = (function () {
         ) {
             const tagInput = document.querySelector(".tag-input");
             const noteValue = returnNoteValue();
-            console.log(noteValue);
             const tagArray = noteValue.noteValue.tags;
             if (tagInput.value == "") return;
 
-            console.log(tagInput.value);
             tagArray.push({ id: Date.now(), tagValue: tagInput.value });
-            console.log(noteValue.noteValue);
             tagInput.value = "";
             renderTagInput(tagArray);
-            // updateUI();
         }
 
         if (
@@ -351,7 +334,6 @@ const noteApp = (function () {
             const tagInput = document.querySelector(".tag-input");
             const noteValue = returnNoteValue();
             const tagArray = noteValue.noteValue.tags;
-            // updateUI();
             renderTagInput(tagArray);
             tagInput.value = "";
         }
@@ -411,7 +393,6 @@ const noteApp = (function () {
     function deleteNullNoteFunc() {
         const value = returnNoteValue();
         const noteArray = value.projValue.contents;
-        console.log(noteArray);
 
         const nullNote = noteArray.filter((note) => {
             return note.noteContent == undefined;
@@ -490,7 +471,7 @@ const noteApp = (function () {
         const noteTagsBtnDiv = document.querySelector(".note-tags-btn-div");
         const noteValue = returnNoteValue();
 
-        if (noteValue.noteValue == undefined) return;
+        if (noteValue.noteValue === undefined) return;
         const tagArray = noteValue.noteValue.tags;
 
         noteTagsBtnDiv.innerHTML = "";
@@ -557,7 +538,6 @@ const noteApp = (function () {
             return;
         }
 
-        // return;
         currentNoteObject.noteContent = noteText.value;
         currentNoteObject.noteTitle = noteInputTitle.value;
 
@@ -568,7 +548,6 @@ const noteApp = (function () {
         updateUI();
         noteObjHasBeenCreated = true;
         disabledAddBtn();
-        console.log(currentNoteObject);
     }
 
     // to select notes or add select class
@@ -642,7 +621,6 @@ const noteApp = (function () {
         const [value] = filterStorage(id);
 
         projectLists.innerHTML = "";
-        // console.log(storageArray);
 
         storageArray.forEach(function (item) {
             projectLists.innerHTML += listCard(item.projectName, item.id);
@@ -657,7 +635,6 @@ const noteApp = (function () {
         const [projValue] = filterStorage(projId);
         const noteID = parseInt(selectedNoteID);
 
-        // console.log(projValue == undefined);
         if (projValue == undefined) return;
         const [noteValue] = filterContent(projValue.contents, noteID);
         return { noteValue, projValue };
@@ -669,7 +646,6 @@ const noteApp = (function () {
 
         const noteValue = returnNoteValue();
         selectedNoteItem();
-        // console.log();
         displayNoteInfo(noteValue.noteValue);
     }
 
@@ -748,7 +724,6 @@ const noteApp = (function () {
     function displayProject(project) {
         if (project === undefined) return;
 
-        console.log(project.contents);
         noteHeader.textContent = `${project.projectName}`;
         noteCards.innerHTML = "";
 

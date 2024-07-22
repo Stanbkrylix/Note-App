@@ -1,5 +1,4 @@
 export default function mobileFunctionalities() {
-    console.log("from mobile.js");
     const closeProjectBtnMobile = document.querySelector(
         ".close-project-section"
     );
@@ -7,8 +6,6 @@ export default function mobileFunctionalities() {
     const menuTabletOpenBtn = document.querySelector(".medium-screen-menu-btn");
 
     const projectSection = document.querySelector(".project-section");
-    const notesSection = document.querySelector(".notes-section");
-    const displayNoteSection = document.querySelector(".display-note-section");
     const displaySectionWrapper = document.querySelector(
         ".display-section-wrapper"
     );
@@ -39,15 +36,19 @@ export default function mobileFunctionalities() {
         }
     });
 
+    function removeClass() {
+        projectSection.classList.remove("move-left");
+        projectSection.classList.remove("move-left-tablet");
+
+        overlayModal.classList.remove("move-left");
+        overlayModal.classList.remove("move-left-tablet");
+    }
     menu.addEventListener("click", (e) => {
         if (
             projectSection.classList.contains("move-left") ||
             projectSection.classList.contains("move-left-tablet")
         ) {
-            projectSection.classList.remove("move-left");
-            projectSection.classList.remove("move-left-tablet");
-            overlayModal.classList.remove("move-left");
-            overlayModal.classList.remove("move-left-tablet");
+            removeClass();
         }
     });
 
@@ -56,10 +57,7 @@ export default function mobileFunctionalities() {
             projectSection.classList.contains("move-left-tablet") ||
             projectSection.classList.contains("move-left")
         ) {
-            projectSection.classList.remove("move-left-tablet");
-            overlayModal.classList.remove("move-left-tablet");
-            projectSection.classList.remove("move-left");
-            overlayModal.classList.remove("move-left");
+            removeClass();
         }
     });
 

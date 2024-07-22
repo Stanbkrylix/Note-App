@@ -23,7 +23,6 @@ body {
 .project-section {
     border: 1px solid black;
     padding: 1.5rem;
-    /* height: 40vh; */
     color: white;
     background-color: #1d2326;
     display: flex;
@@ -40,7 +39,6 @@ body {
     padding: 0.5rem;
     border-radius: 0.4rem;
     border: none;
-    /* margin-bottom: 4rem; */
 }
 #search-bar {
     background-color: #313b41;
@@ -67,7 +65,6 @@ body {
     list-style: none;
 }
 .project-lists-list {
-    /* text-align: center; */
     display: flex;
     text-align: center;
     justify-content: space-around;
@@ -77,8 +74,6 @@ body {
     border-radius: 1rem;
     border: 2px solid #1d2326;
     cursor: pointer;
-    /* background-color: #fff; */
-    /* flex-direction: column; */
 }
 .project-lists-list:hover {
     transform: scale(1.01);
@@ -113,7 +108,6 @@ body {
     font-size: 1.3em;
     padding: 0.3rem;
     border-radius: 0.5rem;
-    /* border: 1px solid #436170; */
     cursor: pointer;
     background-color: #313b41;
     color: white;
@@ -131,13 +125,11 @@ body {
 .edit-folder:hover,
 .delete-folder:hover {
     background-color: #1d2326;
-    /* padding: 0.5rem; */
 }
 
 /* Add folder section */
 
 .add-project {
-    /* padding: 0.5rem; */
     width: 100%;
 }
 .add-btn {
@@ -153,7 +145,6 @@ body {
     color: white;
 }
 .add-btn:hover {
-    /* background-color: #fff; */
     transform: scale(1.02);
 }
 .btn-text {
@@ -163,11 +154,10 @@ body {
 /* ===================== Note Card section ========================   */
 
 .notes-section {
-    /* border: 0.5rem solid #; */
     background-color: #1d2326;
     color: white;
     padding: 1.5rem;
-    flex: 2;
+    flex: 1;
 }
 .note-heading {
     margin-bottom: 1rem;
@@ -214,6 +204,9 @@ body {
 
 /*  ===================== display note section =================== */
 
+.display-section-wrapper {
+    flex: 2;
+}
 .display-note-section {
     flex: 3;
     background-color: #1d2326;
@@ -256,7 +249,6 @@ body {
     font-size: 1.3em;
     padding: 0.5rem;
     border-radius: 0.5rem;
-    /* border: 1px solid #436170; */
     cursor: pointer;
     background-color: #313b41;
     color: white;
@@ -305,7 +297,6 @@ body {
 .note-tags-btn-div a {
     font-size: 1.4em;
     font-weight: bold;
-    /* font-style: ; */
     border: none;
     padding: 0.4rem;
     border-radius: 0.5rem;
@@ -322,7 +313,6 @@ body {
 
 .note-tags-div {
     display: flex;
-    /* justify-content: center; */
     align-items: center;
     gap: 0.4rem;
 }
@@ -341,9 +331,7 @@ body {
 .tag-anchors::-webkit-scrollbar,
 .tags div::-webkit-scrollbar,
 .note-tags-div div::-webkit-scrollbar {
-    /* width: 0.04rem; */
     height: 0.3rem;
-    /* cursor: pointer; */
 }
 .tag-anchors::-webkit-scrollbar-thumb,
 .tags div::-webkit-scrollbar-thumb,
@@ -403,7 +391,6 @@ body {
     background-color: #313b41;
     padding: 0.5rem;
     border-radius: 0.5rem;
-    /* transition: 250ms; */
 }
 
 .tag:hover {
@@ -427,7 +414,6 @@ body {
 .div-title {
     background-color: #313b41;
     border-radius: 0.5rem;
-    /* border: none; */
     margin-bottom: 1rem;
 }
 .title-input {
@@ -515,8 +501,6 @@ tags div::-webkit-scrollbar-thumb:hover {
 .note-info {
     overflow-y: scroll;
     overflow-x: hidden;
-    /* scroll-snap-type: y mandatory; */
-    /* height: 440px; */
 }
 
 .project-lists div,
@@ -570,7 +554,7 @@ tags div::-webkit-scrollbar-thumb:hover {
     display: none;
 }
 
-@media (max-width: 728px) {
+@media (max-width: 850px) {
     .move-left-tablet {
         transform: translateX(-120%);
     }
@@ -641,6 +625,12 @@ tags div::-webkit-scrollbar-thumb:hover {
         width: 200px;
         flex: 1;
     }
+
+    .note-heading {
+        text-align: center;
+    }
+
+    /*  */
     .display-section-wrapper {
         flex: 2;
         width: 300px;
@@ -648,17 +638,15 @@ tags div::-webkit-scrollbar-thumb:hover {
         padding: 1rem;
     }
     .display-note-section {
-        /* display: flex; */
         height: 100%;
-        /* padding: 1rem; */
-
-        /* padding: 1rem; */
     }
     .display-note-container {
         height: 100%;
         width: 100%;
         text-align: center;
-        /* display: flex; */
+    }
+    .note-textarea {
+        width: 100%;
     }
 
     .tag-input-field {
@@ -711,9 +699,7 @@ tags div::-webkit-scrollbar-thumb:hover {
     .overlay-modal-medium {
         display: none;
     }
-    .close-project-section {
-        /* display: block; */
-    }
+
     .medium-screen-size {
         margin-bottom: 1rem;
         display: none;
@@ -727,7 +713,6 @@ tags div::-webkit-scrollbar-thumb:hover {
         z-index: 2;
         height: 100%;
         border-radius: 0.5rem;
-        /* transform: translateX(-150%); */
     }
     .project-lists-list {
         flex-direction: row;
@@ -740,7 +725,6 @@ tags div::-webkit-scrollbar-thumb:hover {
         z-index: 1;
         height: 100%;
         min-height: 700px;
-        /* height: 50vh; */
     }
 
     .left-and-right-btns {
@@ -772,7 +756,6 @@ tags div::-webkit-scrollbar-thumb:hover {
         z-index: 3;
         width: 100%;
         height: 100%;
-        /* padding-left: 2rem; */
     }
     .display-note-section {
         height: 94%;
@@ -789,7 +772,6 @@ tags div::-webkit-scrollbar-thumb:hover {
     }
     .go-back-btn-div {
         padding: 0.5rem;
-        /* margin-bottom: 0.5rem; */
         background-color: #1d2326;
         display: block;
         text-align: left;
@@ -828,9 +810,6 @@ tags div::-webkit-scrollbar-thumb:hover {
         width: 100%;
         height: 700px;
         text-align: center;
-        /* justify-content: center; */
-        /* display: block; */
-        /* margin: 0 auto; */
     }
 
     .search-bar-div {
@@ -845,7 +824,6 @@ tags div::-webkit-scrollbar-thumb:hover {
         width: 100%;
         background-color: rgba(0, 0, 0, 0.5);
         z-index: 2;
-        /* transform: translateX(-150%); */
         height: 100%;
         left: 20px;
     }
@@ -855,17 +833,14 @@ tags div::-webkit-scrollbar-thumb:hover {
         z-index: 2;
         width: 100%;
         height: 100%;
-        /* left: ; */
     }
     .project-section {
-        /* display: none; */
         position: absolute;
         width: 75%;
         left: 20px;
         z-index: 2;
         height: 100%;
         border-radius: 0.5rem;
-        /* transform: translateX(-150%); */
     }
     .notes-section {
         max-width: 100%;
@@ -873,7 +848,6 @@ tags div::-webkit-scrollbar-thumb:hover {
         z-index: 1;
         height: 100%;
         min-height: 700px;
-        /* height: 50vh; */
     }
     .left-and-right-btns {
         display: block;
@@ -909,7 +883,6 @@ tags div::-webkit-scrollbar-thumb:hover {
     }
     .go-back-btn-div {
         padding: 0.5rem;
-        /* margin-bottom: 0.5rem; */
         background-color: #1d2326;
         display: block;
         text-align: left;
