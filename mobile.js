@@ -62,7 +62,6 @@ export default function mobileFunctionalities() {
     });
 
     displayLeftArrow.addEventListener("click", (e) => {
-        console.log(e.target);
         if (!displaySectionWrapper.classList.contains("move-right")) {
             displaySectionWrapper.classList.add("move-right");
             overlayModal2.classList.add("move-right");
@@ -70,7 +69,6 @@ export default function mobileFunctionalities() {
     });
 
     rightArrow.addEventListener("click", (e) => {
-        console.log(e.target);
         if (displaySectionWrapper.classList.contains("move-right")) {
             displaySectionWrapper.classList.remove("move-right");
             overlayModal2.classList.remove("move-right");

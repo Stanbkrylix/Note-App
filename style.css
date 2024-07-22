@@ -791,6 +791,7 @@ tags div::-webkit-scrollbar-thumb:hover {
         color: white;
         border-radius: 0.5rem;
         padding: 0.4rem;
+        cursor: pointer;
     }
     .tag-anchors {
         width: 100%;
@@ -902,6 +903,7 @@ tags div::-webkit-scrollbar-thumb:hover {
         color: white;
         border-radius: 0.5rem;
         padding: 0.4rem;
+        cursor: pointer;
     }
     .tag-anchors {
         width: 100%;
