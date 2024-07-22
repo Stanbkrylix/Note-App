@@ -1,5 +1,5 @@
-import dateFunc from "/date.js";
-import mobileFunctionalities from "/mobile.js";
+import dateFunc from "./date.js";
+import mobileFunctionalities from "./mobile.js";
 
 mobileFunctionalities();
 const noteApp = (function () {
