@@ -678,8 +678,9 @@ tags div::-webkit-scrollbar-thumb:hover {
     }
     .article {
         position: relative;
-        width: 90%;
+        width: 100%;
         height: 700px;
+        padding: 0;
     }
 
     .search-bar-div {
@@ -719,7 +720,7 @@ tags div::-webkit-scrollbar-thumb:hover {
         display: flex;
         position: absolute;
         width: 75%;
-        left: 20px;
+        left: 0;
         z-index: 2;
         height: 100%;
         border-radius: 0.5rem;
@@ -730,11 +731,11 @@ tags div::-webkit-scrollbar-thumb:hover {
 
     /* note sections */
     .notes-section {
-        max-width: 100%;
+        width: 100%;
         border-radius: 0.5rem;
         z-index: 1;
         height: 100%;
-        min-height: 700px;
+        height: 100%;
     }
 
     .left-and-right-btns {
@@ -766,6 +767,8 @@ tags div::-webkit-scrollbar-thumb:hover {
         z-index: 3;
         width: 100%;
         height: 100%;
+        padding: 0;
+        padding-left: 1.3rem;
     }
     .display-note-section {
         height: 94%;
@@ -885,7 +888,6 @@ tags div::-webkit-scrollbar-thumb:hover {
         padding-left: 2rem;
     }
     .display-note-section {
-        /* height: 94%; */
         width: 100%;
         padding: 0.4rem;
         border-radius: 0.5rem;
