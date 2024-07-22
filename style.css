@@ -620,6 +620,16 @@ tags div::-webkit-scrollbar-thumb:hover {
         padding: 0.2rem;
     }
 
+    .close-project-section {
+        text-align: center;
+        cursor: pointer;
+        border-radius: 0.4rem;
+    }
+    .close-project-section:hover {
+        transform: scale(1);
+        border: 0.1rem solid #fff;
+    }
+
     /*  */
     .notes-section {
         width: 200px;
