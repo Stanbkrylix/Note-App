@@ -157,7 +157,7 @@ const noteApp = (function () {
         // delete projects
         if (target.classList.contains("delete-folder")) {
             let check =
-                prompt(`Are you sure you want to delete tags? If so type "Y" or "y" if not type "N" or "n".
+                prompt(`Are you sure you want to delete folder? If so type "Y" or "y" if not type "N" or "n".
             `);
             if (check == "n" || check == "N") {
                 return;
@@ -197,6 +197,7 @@ const noteApp = (function () {
             selectedNoteItem();
             displayNoteInfo(noteValue);
             render();
+            mobileFunctionalities().displayRightArrowFunc();
         }
     });
 
@@ -228,6 +229,7 @@ const noteApp = (function () {
 
             loadNotesTextArea();
             selectedNoteItem();
+            mobileFunctionalities().displayRightArrowFunc();
             noteObjHasBeenCreated = false;
         }
     });
@@ -247,18 +249,27 @@ const noteApp = (function () {
             deleteNoteFunc();
             disabledAddBtn();
             emptyNoteSection();
+            mobileFunctionalities().displayLeftArrowFunc();
         }
 
         if (target.classList.contains("note-delete")) {
-            const noteValue = returnNoteValue();
+            let check =
+                prompt(`Are you sure you want to note? If so type "Y" or "y" if not type "N" or "n".
+            `);
+            if (check == "n" || check == "N") {
+                return;
+            } else if (check == "y" || check == "Y") {
+                const noteValue = returnNoteValue();
 
-            const projValue = noteValue.projValue.contents;
-            const index = projValue.indexOf(noteValue.noteValue);
-            projValue.splice(index, 1);
-            updateUI();
-            displayProject(noteValue.projValue);
-            emptyNoteSection();
-            render();
+                const projValue = noteValue.projValue.contents;
+                const index = projValue.indexOf(noteValue.noteValue);
+                projValue.splice(index, 1);
+                updateUI();
+                displayProject(noteValue.projValue);
+                emptyNoteSection();
+                render();
+                mobileFunctionalities().displayLeftArrowFunc();
+            }
         }
 
         if (target.classList.contains("note-edit")) {
@@ -548,6 +559,7 @@ const noteApp = (function () {
         updateUI();
         noteObjHasBeenCreated = true;
         disabledAddBtn();
+        mobileFunctionalities().displayLeftArrowFunc();
     }
 
     // to select notes or add select class
